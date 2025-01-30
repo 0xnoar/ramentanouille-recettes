@@ -1,28 +1,24 @@
 // Configuration
 const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
-const API_KEY = env.NETLIFY_ENV_GOOGLE_SHEETS_API_KEY;
+const API_KEY = process.env.NETLIFY_ENV_GOOGLE_SHEETS_API_KEY; // <-- Correction ici
 
 let allRecipes = [];
 
-// Fonction pour charger les recettes depuis Google Sheets
 async function loadRecipes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-    console.log('URL de requête:', url);
     
     try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log('Données reçues:', data);
-
-        if (data.values && data.values.length > 0) {
+        
+        if (data.values?.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
-            console.log('Recettes converties:', allRecipes);
             displayRecipes(allRecipes);
             updateRecipeCounter(allRecipes.length);
         }
     } catch (error) {
-        console.error('Erreur:', error);
+        console.error('Erreur :', error);
     }
 }
 

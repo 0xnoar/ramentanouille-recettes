@@ -1,9 +1,16 @@
-/* Styles généraux */
-body {
-    font-family: Arial, sans-serif;
-    background: #f8f8f8;
+/* Réinitialisation des styles */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #f7e29c, #f5c18e);
+    color: #333;
+    padding: 20px;
 }
 
 /* Conteneur des recettes */
@@ -12,52 +19,65 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-    padding: 20px;
 }
 
-/* Carte de recette */
+/* Carte recette */
 .recipe-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #fff;  /* ✅ Fond blanc */
+    border-radius: 10px;
     padding: 15px;
-    width: 280px; /* Ajuste la taille des cartes */
+    width: 300px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-/* Conteneur de l'image pour garder un format carré */
-.recipe-image-container {
+/* Images des recettes */
+.recipe-card img {
     width: 100%;
-    height: 250px; /* Hauteur fixe pour conserver un format carré */
-    position: relative;
-    overflow: hidden;
+    height: 200px;  /* ✅ Hauteur fixe */
+    object-fit: cover;  /* ✅ Assure un format carré */
     border-radius: 8px;
-}
-
-.recipe-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* S'assure que l'image remplit bien le carré */
 }
 
 /* Titres des recettes */
 .recipe-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
-/* Styles pour la liste des filtres */
-.filters {
+/* Texte des recettes */
+.recipe-text {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/* Liste des filtres */
+.filter-container {
     background: #ffeb3b;
     padding: 15px;
-    border-radius: 8px;
-    margin: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-/* Correction du style du texte */
-p {
-    color: #333;
+/* Ajustement des boutons */
+button {
+    background: #ff9800;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e68900;
+}
+
+/* Pied de page */
+footer {
+    margin-top: 20px;
+    text-align: center;
     font-size: 14px;
-    margin: 5px 0;
+    color: #666;
 }

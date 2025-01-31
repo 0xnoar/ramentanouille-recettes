@@ -24,17 +24,23 @@ h1, h2, h3 {
 }
 
 header {
+    display: flex;
+    align-items: center;
     background-color: var(--primary-color);
     color: var(--accent-color);
-    text-align: center;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-header img {
-    max-width: 150px;
+header img.logo {
+    max-width: 100px;
+    margin-right: 20px;
+}
+
+header h1 {
+    margin: 0;
 }
 
 nav {

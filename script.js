@@ -8,7 +8,7 @@ let allRecipes = [];
 async function loadRecipes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
     console.log('URL de requête:', url);
-    
+
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -16,7 +16,7 @@ async function loadRecipes() {
 
         if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
-            console.log('Recettes converties:', allRecipes); // Pour déboguer
+            console.log('Recettes converties:', allRecipes);
             displayRecipes(allRecipes);
             updateRecipeCounter(allRecipes.length);
         }
@@ -28,27 +28,42 @@ async function loadRecipes() {
 // Fonction pour transformer les données en objets recettes
 function convertSheetsDataToRecipes(values) {
     const headers = values[0].map(header => header.trim());
-    console.log('En-têtes trouvés:', headers); // Pour déboguer
+    console.log('En-têtes trouvés:', headers);
 
     return values.slice(1).map(row => {
         const recipe = {};
         headers.forEach((header, index) => {
             recipe[header] = row[index] ? row[index].trim() : '';
         });
-        console.log('Recette créée:', recipe); // Pour déboguer
+        console.log('Recette créée:', recipe);
         return recipe;
     });
 }
 
-function createRecipeCard(recipe) {
-    let imageUrl = recipe['Photo de la recette'];
-    console.log('URL image originale:', imageUrl); // Pour déboguer
-    
-    if (imageUrl && imageUrl.includes('drive.google.com')) {
-        const fileId = imageUrl.split('/').pop().split('=').pop();
-        imageUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
+// ✅ Fonction pour convertir les liens Google Drive en affichage direct
+function convertGoogleDriveUrl(driveUrl) {
+    if (!driveUrl) return 'placeholder.jpg'; // Image par défaut si vide
+
+    let fileId = '';
+
+    if (driveUrl.includes('open?id=')) {
+        // Format : https://drive.google.com/open?id=FILE_ID
+        fileId = driveUrl.split('open?id=')[1];
+    } else if (driveUrl.includes('/file/d/')) {
+        // Format : https://drive.google.com/file/d/FILE_ID/view
+        fileId = driveUrl.split('/file/d/')[1]?.split('/')[0];
+    } else if (driveUrl.includes('id=')) {
+        // Autre format possible
+        fileId = driveUrl.split('id=')[1]?.split('&')[0];
     }
-    console.log('URL image transformée:', imageUrl); // Pour déboguer
+
+    return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}` : 'placeholder.jpg';
+}
+
+// Fonction pour créer une carte de recette
+function createRecipeCard(recipe) {
+    let imageUrl = convertGoogleDriveUrl(recipe['Photo de la recette']);
+    console.log('Lien converti de l’image:', imageUrl);
 
     const card = document.createElement('div');
     card.classList.add('recipe-card');
@@ -57,7 +72,7 @@ function createRecipeCard(recipe) {
         <div class="recipe-image-container">
             <img class="recipe-image" 
                  src="${imageUrl}" 
-                 alt="${recipe['Titre de la recette']}"
+                 alt="${recipe['Titre de la recette'] || 'Sans titre'}"
                  onerror="this.src='placeholder.jpg'">
         </div>
         <div class="recipe-content">
@@ -98,7 +113,7 @@ function updateRecipeCounter(count) {
     document.querySelector('#recipe-counter span').textContent = count;
 }
 
-// Modifions aussi la fonction de filtrage
+// ✅ Fonction pour filtrer les recettes selon les critères
 function filterRecipes() {
     const selectedFilters = {
         regime: Array.from(document.querySelectorAll('input[name="regime"]:checked')).map(cb => cb.value),
@@ -108,23 +123,29 @@ function filterRecipes() {
 
     let filteredRecipes = [...allRecipes];
 
-    if (selectedFilters.regime.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.regime.includes(recipe['Régime alimentaire']?.trim())
-        );
+    // Si "Sans restriction" est coché, on affiche tout
+    if (selectedFilters.regime.includes("Sans restriction")) {
+        displayRecipes(allRecipes);
+        updateRecipeCounter(allRecipes.length);
+        return;
     }
 
-    if (selectedFilters.portion.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.portion.includes(recipe['Type de portion']?.trim())
-        );
-    }
+    filteredRecipes = filteredRecipes.filter(recipe => {
+        const recipeRegime = recipe['Régime alimentaire']?.split(',').map(r => r.trim()) || [];
 
-    if (selectedFilters.type.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.type.includes(recipe['Type de plat']?.trim())
-        );
-    }
+        // Autoriser uniquement "Sans gluten" avec "Végétarien" et "Végan"
+        const allowedCombinations = ["Sans gluten", "Végétarisme", "Véganisme"];
+        const isAllowedCombination = recipeRegime.every(r => allowedCombinations.includes(r));
+
+        const regimeMatch = selectedFilters.regime.length === 0 ||
+            (isAllowedCombination && selectedFilters.regime.every(r => recipeRegime.includes(r))) ||
+            (!isAllowedCombination && selectedFilters.regime.length === 1 && recipeRegime.includes(selectedFilters.regime[0]));
+
+        const portionMatch = selectedFilters.portion.length === 0 || selectedFilters.portion.includes(recipe['Type de portion']);
+        const typeMatch = selectedFilters.type.length === 0 || selectedFilters.type.includes(recipe['Type de plat']);
+
+        return regimeMatch && portionMatch && typeMatch;
+    });
 
     displayRecipes(filteredRecipes);
     updateRecipeCounter(filteredRecipes.length);

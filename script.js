@@ -42,23 +42,22 @@ function convertSheetsDataToRecipes(values) {
 
 // ✅ Fonction pour convertir les liens Google Drive en affichage direct
 function convertGoogleDriveUrl(driveUrl) {
-    if (!driveUrl) return 'placeholder.jpg'; // Image par défaut si vide
+    if (!driveUrl || driveUrl.trim() === "") return 'placeholder.jpg';
 
     let fileId = '';
 
     if (driveUrl.includes('open?id=')) {
-        // Format : https://drive.google.com/open?id=FILE_ID
         fileId = driveUrl.split('open?id=')[1];
     } else if (driveUrl.includes('/file/d/')) {
-        // Format : https://drive.google.com/file/d/FILE_ID/view
         fileId = driveUrl.split('/file/d/')[1]?.split('/')[0];
     } else if (driveUrl.includes('id=')) {
-        // Autre format possible
         fileId = driveUrl.split('id=')[1]?.split('&')[0];
     }
 
-    return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}` : 'placeholder.jpg';
+    // Utilisation de lh3.googleusercontent.com
+    return fileId ? `https://lh3.googleusercontent.com/d/${fileId}=w1000` : 'placeholder.jpg';
 }
+
 
 // Fonction pour créer une carte de recette
 function createRecipeCard(recipe) {

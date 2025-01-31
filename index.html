@@ -5,17 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://sheets.googleapis.com https://drive.google.com 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: https:;">
     <title>Ramen Ta Nouille - Recettes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
+        <img src="logo.png" alt="Ramen Ta Nouille">
         <h1>Recettes Ramen Ta Nouille</h1>
         <div id="recipe-counter" class="counter">
             Recettes affichées : <span>0</span>
         </div>
     </header>
 
-    <section class="filters">
+    <nav>
+        <ul>
+            <li><a href="#filters">Filtres</a></li>
+            <li><a href="#recipes-container">Recettes</a></li>
+        </ul>
+    </nav>
+
+    <section class="filters" id="filters">
         <h2>Filtres</h2>
         
         <div class="filter-group">
@@ -55,6 +64,10 @@
     <main id="recipes-container">
         <!-- Les recettes seront ajoutées ici dynamiquement -->
     </main>
+
+    <footer>
+        <p>&copy; 2023 Ramen Ta Nouille. Tous droits réservés.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

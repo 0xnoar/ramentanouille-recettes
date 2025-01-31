@@ -105,11 +105,9 @@ nav a {
 
 .recipe-image-container {
     width: 100%;
-    max-width: 300px; /* Ajoutez cette ligne pour limiter la taille */
-    padding-top: 100%;
+    padding-top: 56.25%; /* Ratio d'aspect 16:9 au lieu de 1:1 */
     position: relative;
     overflow: hidden;
-    margin: 0 auto; /* Centrer le conteneur si nécessaire */
 }
 
 .recipe-image {

@@ -109,9 +109,11 @@ nav a {
 
 .recipe-image-container {
     width: 100%;
+    max-width: 300px; /* Ajoutez cette ligne pour limiter la taille */
     padding-top: 100%;
     position: relative;
     overflow: hidden;
+    margin: 0 auto; /* Centrer le conteneur si nécessaire */
 }
 
 .recipe-image {

@@ -15,45 +15,14 @@
     </header>
 
     <section class="filters">
-        <h2>Filtres</h2>
-        
-        <div class="filter-group">
-            <h3>Régime alimentaire</h3>
-            <label><input type="checkbox" name="regime" value="Sans restriction"> Sans restriction</label>
-            <label><input type="checkbox" name="regime" value="Véganisme"> Véganisme</label>
-            <label><input type="checkbox" name="regime" value="Végétarisme"> Végétarisme</label>
-            <label><input type="checkbox" name="regime" value="Sans gluten"> Sans gluten</label>
-            <p class="info-message">
-                ⚠️ Seulement l'option "Sans gluten" peut être combinée au végétarisme et au véganisme.<br>
-                Les autres options ne peuvent pas être combinées.
-            </p>
-        </div>
-
-        <div class="filter-group">
-            <h3>Type de portion</h3>
-            <label><input type="checkbox" name="portion" value="Plat à partager"> Plat à partager</label>
-            <label><input type="checkbox" name="portion" value="Portions individuelles"> Portions individuelles</label>
-        </div>
-
-        <div class="filter-group">
-            <h3>Type de plat</h3>
-            <label><input type="checkbox" name="type" value="Entrée"> Entrée</label>
-            <label><input type="checkbox" name="type" value="Plat principal"> Plat principal</label>
-            <label><input type="checkbox" name="type" value="Dessert"> Dessert</label>
-        </div>
+        <!-- ... vos filtres ... -->
     </section>
 
     <main id="recipes-container">
         <!-- Les recettes seront ajoutées ici dynamiquement -->
     </main>
 
-    <script>
-        window.env = {
-          NETLIFY_ENV_GOOGLE_SHEETS_API_KEY: '{{ NETLIFY_ENV_GOOGLE_SHEETS_API_KEY }}'
-        };
-      </script>
-      <script src="script.js"></script>
-      
+    <!-- Un seul script.js à la fin du body -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,130 +1,63 @@
-:root {
-    --primary-color: #f7b2c7; 
-    --secondary-color: #f0e45c;
-    --accent-color: #000;
-    --light-color: #fff;
-    --dark-color: #333;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Styles généraux */
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
-    padding: 20px;
-}
-
-h1, h2, h3 {
-    font-family: 'Caveat', cursive;
-}
-
-header {
-    display: flex;
-    align-items: center;
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-header img.logo {
-    max-width: 100px;
-    margin-right: 20px;
-}
-
-header h1 {
+    background: #f8f8f8;
     margin: 0;
+    padding: 0;
 }
 
-nav {
-    margin-bottom: 20px;
-}
-
-nav ul {
-    list-style: none;
+/* Conteneur des recettes */
+.recipe-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-}
-
-nav a {
-    text-decoration: none;
-    padding: 10px;
-    color: var(--accent-color);
-}
-
-.counter {
-    background-color: var(--light-color);
-    color: var(--accent-color);
-    padding: 10px 20px;
-    border-radius: 20px;
-    margin: 10px 0;
-    display: inline-block;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.filters {
-    background-color: var(--secondary-color);
+    gap: 20px;
     padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px; 
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.filter-group {
-    margin-bottom: 20px;
-}
-
-.filter-group h3 {
-    margin-bottom: 10px;
-    color: var(--dark-color);
-}
-
-.filter-group label {
-    display: block;
-    margin: 8px 0;
-    cursor: pointer;
-}
-
+/* Carte de recette */
 .recipe-card {
-    width: 250px; /* Taille fixe */
-    margin: 15px;
-    transition: transform 0.3s;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 280px; /* Ajuste la taille des cartes */
+    text-align: center;
 }
 
-.recipe-card:hover {
-    transform: translateY(-5px);
-}
-
+/* Conteneur de l'image pour garder un format carré */
 .recipe-image-container {
     width: 100%;
-    padding-top: 56.25%; /* Ratio d'aspect 16:9 au lieu de 1:1 */
+    height: 250px; /* Hauteur fixe pour conserver un format carré */
     position: relative;
     overflow: hidden;
+    border-radius: 8px;
 }
 
-.recipe-image {
-    position: absolute;
-    top: 0;
-    left: 0;
+.recipe-image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
+    object-fit: cover; /* S'assure que l'image remplit bien le carré */
 }
 
-.recipe-content {
-    padding: 20px;
-}
-
+/* Titres des recettes */
 .recipe-title {
-    color: var(--dark-color);
-    font-size: 1.5em;
-    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Styles pour la liste des filtres */
+.filters {
+    background: #ffeb3b;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+/* Correction du style du texte */
+p {
+    color: #333;
+    font-size: 14px;
+    margin: 5px 0;
+}

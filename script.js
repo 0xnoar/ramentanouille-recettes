@@ -83,6 +83,22 @@ function createRecipeCard(recipe) {
     return card;
 }
 
+// Fonction pour afficher les recettes
+function displayRecipes(recipes) {
+    const container = document.getElementById('recipes-container');
+    container.innerHTML = '';
+
+    recipes.forEach(recipe => {
+        const card = createRecipeCard(recipe);
+        container.appendChild(card);
+    });
+}
+
+// Fonction pour mettre à jour le compteur
+function updateRecipeCounter(count) {
+    document.querySelector('#recipe-counter span').textContent = count;
+}
+
 // Modifions aussi la fonction de filtrage
 function filterRecipes() {
     const selectedFilters = {
@@ -114,3 +130,11 @@ function filterRecipes() {
     displayRecipes(filteredRecipes);
     updateRecipeCounter(filteredRecipes.length);
 }
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+    loadRecipes();
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', filterRecipes);
+    });
+});

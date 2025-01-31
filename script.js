@@ -3,20 +3,26 @@ const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
 const API_KEY = 'AIzaSyAwbiwOApYCVJoQMDIvsY2SwqT39nAMLgk';
 
-let allRecipes = [];
-
 async function loadRecipes() {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}&access_token=${API_KEY}`;
     try {
-        const response = await fetch('/.netlify/functions/getrecipes');
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            }
+        });
         const data = await response.json();
+        console.log('Données reçues:', data); // Pour déboguer
         
-        if (data.values?.length > 0) {
+        if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
             displayRecipes(allRecipes);
             updateRecipeCounter(allRecipes.length);
         }
     } catch (error) {
-        console.error('Erreur :', error);
+        console.error('Erreur:', error);
     }
 }
 

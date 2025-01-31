@@ -38,34 +38,44 @@ function convertSheetsDataToRecipes(values) {
 
 function createRecipeCard(recipe) {
     let imageUrl = recipe['Photo de la recette'];
-    
-    // Vérifier si c'est un lien Google Drive
+    console.log('URL image originale:', imageUrl); // Pour déboguer
+
+    // Gestion des liens Google Drive
     if (imageUrl && imageUrl.includes('drive.google.com')) {
-        // Transformer le lien Google Drive en URL d'image directe
-        imageUrl = imageUrl.replace('/open?id=', '/uc?id=');
+        const fileId = imageUrl.includes('id=') 
+            ? imageUrl.split('id=')[1]
+            : imageUrl.split('/d/')[1]?.split('/')[0];
+            
+        if (fileId) {
+            imageUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
+        }
     }
-    
+    console.log('URL image transformée:', imageUrl); // Pour déboguer
+
     const card = document.createElement('div');
     card.classList.add('recipe-card');
 
     const content = `
         <div class="recipe-image-container">
-            <img class="recipe-image" src="${imageUrl}" alt="${recipe['Titre de la recette']}">
+            <img class="recipe-image" 
+                 src="${imageUrl}" 
+                 alt="${recipe['Titre de la recette']}"
+                 onerror="this.src='placeholder.jpg'">
         </div>
         <div class="recipe-content">
-            <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+            <h3 class="recipe-title">${recipe['Titre de la recette'] || 'Sans titre'}</h3>
             <div class="recipe-tags">
-                <span class="tag">${recipe['Régime alimentaire']}</span>
-                <span class="tag">${recipe['Type de portion']}</span>
-                <span class="tag">${recipe['Type de plat']}</span>
+                <span class="tag">${recipe['Régime alimentaire'] || ''}</span>
+                <span class="tag">${recipe['Type de portion'] || ''}</span>
+                <span class="tag">${recipe['Type de plat'] || ''}</span>
             </div>
             <div class="recipe-ingredients">
                 <h4>Ingrédients :</h4>
-                <p>${recipe['Liste des ingrédients']}</p>
+                <p>${recipe['Liste des ingrédients'] || ''}</p>
             </div>
             <div class="recipe-instructions">
                 <h4>Instructions :</h4>
-                <p>${recipe['La cheffe vous conseille']}</p>
+                <p>${recipe['La cheffe vous conseille'] || ''}</p>
             </div>
         </div>
     `;
@@ -74,23 +84,7 @@ function createRecipeCard(recipe) {
     return card;
 }
 
-// Fonction pour afficher les recettes
-function displayRecipes(recipes) {
-    const container = document.getElementById('recipes-container');
-    container.innerHTML = '';
-
-    recipes.forEach(recipe => {
-        const card = createRecipeCard(recipe);
-        container.appendChild(card);
-    });
-}
-
-// Fonction pour mettre à jour le compteur
-function updateRecipeCounter(count) {
-    document.querySelector('#recipe-counter span').textContent = count;
-}
-
-// Fonction pour filtrer les recettes
+// Modifions aussi la fonction de filtrage
 function filterRecipes() {
     const selectedFilters = {
         regime: Array.from(document.querySelectorAll('input[name="regime"]:checked')).map(cb => cb.value),
@@ -98,21 +92,26 @@ function filterRecipes() {
         type: Array.from(document.querySelectorAll('input[name="type"]:checked')).map(cb => cb.value)
     };
 
-    return allRecipes.filter(recipe => {
-        const regimeMatch = selectedFilters.regime.length === 0 || selectedFilters.regime.includes(recipe['Régime alimentaire']);
-        const portionMatch = selectedFilters.portion.length === 0 || selectedFilters.portion.includes(recipe['Type de portion']);
-        const typeMatch = selectedFilters.type.length === 0 || selectedFilters.type.includes(recipe['Type de plat']);
+    let filteredRecipes = [...allRecipes];
 
-        return regimeMatch && portionMatch && typeMatch;
-    });
+    if (selectedFilters.regime.length > 0) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            selectedFilters.regime.includes(recipe['Régime alimentaire']?.trim())
+        );
+    }
+
+    if (selectedFilters.portion.length > 0) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            selectedFilters.portion.includes(recipe['Type de portion']?.trim())
+        );
+    }
+
+    if (selectedFilters.type.length > 0) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            selectedFilters.type.includes(recipe['Type de plat']?.trim())
+        );
+    }
+
+    displayRecipes(filteredRecipes);
+    updateRecipeCounter(filteredRecipes.length);
 }
-
-// Initialisation
-document.addEventListener('DOMContentLoaded', () => {
-    loadRecipes();
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            displayRecipes(filterRecipes());
-        });
-    });
-});

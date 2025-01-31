@@ -16,6 +16,7 @@ async function loadRecipes() {
 
         if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
+            console.log('Recettes converties:', allRecipes); // Pour déboguer
             displayRecipes(allRecipes);
             updateRecipeCounter(allRecipes.length);
         }
@@ -45,13 +46,8 @@ function createRecipeCard(recipe) {
 
     // Gestion des liens Google Drive
     if (imageUrl && imageUrl.includes('drive.google.com')) {
-        const fileId = imageUrl.includes('id=') 
-            ? imageUrl.split('id=')[1]
-            : imageUrl.split('/d/')[1]?.split('/')[0];
-            
-        if (fileId) {
-            imageUrl = `https://drive.google.com/thumbnail?id=${fileId}`;
-        }
+        const fileId = imageUrl.split('/').pop().split('=').pop();
+        imageUrl = `https://drive.google.com/uc?id=${fileId}`;
     }
     console.log('URL image transformée:', imageUrl); // Pour déboguer
 

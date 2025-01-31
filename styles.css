@@ -94,12 +94,13 @@ nav a {
 }
 
 .recipe-card {
-    background-color: var(--light-color);
+    background: white;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease-in;
+    transition: transform 0.3s ease;
 }
 
 .recipe-card:hover {
@@ -108,10 +109,9 @@ nav a {
 
 .recipe-image-container {
     width: 100%;
-    padding-top: 100%; 
+    padding-top: 100%;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
 }
 
 .recipe-image {

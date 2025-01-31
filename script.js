@@ -55,22 +55,19 @@ function createRecipeCard(recipe) {
     card.classList.add('recipe-card');
 
     const content = `
-        <div class="recipe-image-container">
-            <img class="recipe-image" 
-                 src="${imageUrl}" 
-                 alt="${recipe['Titre de la recette']}"
-                 onerror="this.src='placeholder.jpg'">
+    <div class="recipe-image-container">
+        <img class="recipe-image" src="${imageUrl}" alt="${recipe['Titre de la recette']}">
+    </div>
+    <div class="recipe-content">
+        <div class="recipe-header">
+            <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+            <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
         </div>
-        <div class="recipe-content">
-            <h3 class="recipe-title">
-                ${recipe['Titre de la recette']}
-                <span class="spicy-level">${recipe['Niveau de piment'] || ''}</span>
-            </h3>
-            <div class="recipe-tags">
-                <span class="tag">${recipe['Régime alimentaire']}</span>
-                <span class="tag">${recipe['Type de portion']}</span>
-                <span class="tag">${recipe['Type de plat']}</span>
-            </div>
+        <div class="recipe-tags">
+            <span class="tag">${recipe['Régime alimentaire']}</span>
+            <span class="tag">${recipe['Type de portion']}</span>
+            <span class="tag">${recipe['Type de plat']}</span>
+        </div>
             <div class="recipe-ingredients">
                 <h4>Ingrédients :</h4>
                 <p>${recipe['Liste des ingrédients']}</p>

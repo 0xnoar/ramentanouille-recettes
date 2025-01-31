@@ -68,12 +68,19 @@ function createRecipeCard(recipe) {
     const card = document.createElement('div');
     card.classList.add('recipe-card');
 
-    const content = `
+    const imgElement = document.createElement('img');
+    imgElement.classList.add('recipe-image');
+    imgElement.src = imageUrl;
+    imgElement.alt = recipe['Titre de la recette'] || 'Sans titre';
+
+    // Gestion des erreurs de chargement
+    imgElement.onerror = function () {
+        console.error("Erreur de chargement de l'image :", imageUrl);
+        this.src = 'placeholder.jpg';
+    };
+
+    card.innerHTML = `
         <div class="recipe-image-container">
-            <img class="recipe-image" 
-                 src="${imageUrl}" 
-                 alt="${recipe['Titre de la recette'] || 'Sans titre'}"
-                 onerror="this.src='placeholder.jpg'">
         </div>
         <div class="recipe-content">
             <h3 class="recipe-title">${recipe['Titre de la recette'] || 'Sans titre'}</h3>
@@ -93,7 +100,9 @@ function createRecipeCard(recipe) {
         </div>
     `;
 
-    card.innerHTML = content;
+    // Ajout de l'image à la carte
+    card.querySelector('.recipe-image-container').appendChild(imgElement);
+
     return card;
 }
 

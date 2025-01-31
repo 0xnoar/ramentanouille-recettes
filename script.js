@@ -27,11 +27,14 @@ async function loadRecipes() {
 // Fonction pour transformer les données en objets recettes
 function convertSheetsDataToRecipes(values) {
     const headers = values[0].map(header => header.trim());
+    console.log('En-têtes trouvés:', headers); // Pour déboguer
+
     return values.slice(1).map(row => {
         const recipe = {};
         headers.forEach((header, index) => {
             recipe[header] = row[index] ? row[index].trim() : '';
         });
+        console.log('Recette créée:', recipe); // Pour déboguer
         return recipe;
     });
 }

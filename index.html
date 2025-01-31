@@ -47,6 +47,13 @@
         <!-- Les recettes seront ajoutées ici dynamiquement -->
     </main>
 
+    <script>
+        window.env = {
+          NETLIFY_ENV_GOOGLE_SHEETS_API_KEY: '{{ NETLIFY_ENV_GOOGLE_SHEETS_API_KEY }}'
+        };
+      </script>
+      <script src="script.js"></script>
+      
     <script src="script.js"></script>
 </body>
 </html>

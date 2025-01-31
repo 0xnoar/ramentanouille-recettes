@@ -1,7 +1,7 @@
 // Configuration
 const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
-const API_KEY = process.env.NETLIFY_ENV_GOOGLE_SHEETS_API_KEY; // <-- Correction ici
+const API_KEY = window.env?.NETLIFY_ENV_GOOGLE_SHEETS_API_KEY || 'AIzaSyAwbiwOApYCVJoQMDIvsY2SwqT39nAMLgk';
 
 let allRecipes = [];
 

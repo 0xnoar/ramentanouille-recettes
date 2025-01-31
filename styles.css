@@ -11,6 +11,44 @@ body {
     background: linear-gradient(to bottom, #f7e29c, #f5c18e);
     color: #333;
     padding: 20px;
+    text-align: center;
+}
+
+/* Bannière */
+.banner {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px auto; /* Centre la bannière */
+}
+
+.banner img {
+    width: 100%;
+    border-radius: 15px;
+}
+
+/* Conteneur des filtres */
+.filter-container {
+    background: #ffeb3b;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    margin: 0 auto 20px auto; /* Centre les filtres */
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre */
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Texte des filtres */
+.filter-container label {
+    display: block;
+    font-size: 16px;
+    margin: 5px 0;
 }
 
 /* Conteneur des recettes */
@@ -23,7 +61,7 @@ body {
 
 /* Carte recette */
 .recipe-card {
-    background: #fff;  /* ✅ Fond blanc */
+    background: #fff;
     border-radius: 10px;
     padding: 15px;
     width: 300px;
@@ -34,8 +72,8 @@ body {
 /* Images des recettes */
 .recipe-card img {
     width: 100%;
-    height: 200px;  /* ✅ Hauteur fixe */
-    object-fit: cover;  /* ✅ Assure un format carré */
+    height: 200px;
+    object-fit: cover;
     border-radius: 8px;
 }
 
@@ -52,15 +90,7 @@ body {
     line-height: 1.4;
 }
 
-/* Liste des filtres */
-.filter-container {
-    background: #ffeb3b;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-/* Ajustement des boutons */
+/* Boutons */
 button {
     background: #ff9800;
     color: white;

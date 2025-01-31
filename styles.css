@@ -109,7 +109,7 @@ nav a {
 
 .recipe-image-container {
     width: 100%;
-    padding-top: 100%;
+    padding-top: 25%;
     position: relative;
     overflow: hidden;
 }

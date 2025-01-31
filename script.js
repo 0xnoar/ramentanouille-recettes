@@ -43,11 +43,10 @@ function convertSheetsDataToRecipes(values) {
 function createRecipeCard(recipe) {
     let imageUrl = recipe['Photo de la recette'];
     console.log('URL image originale:', imageUrl); // Pour déboguer
-
-    // Gestion des liens Google Drive
+    
     if (imageUrl && imageUrl.includes('drive.google.com')) {
         const fileId = imageUrl.split('/').pop().split('=').pop();
-        imageUrl = `https://drive.google.com/uc?id=${fileId}`;
+        imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
     }
     console.log('URL image transformée:', imageUrl); // Pour déboguer
 

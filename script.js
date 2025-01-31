@@ -92,6 +92,8 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
+    console.log('Filtres sélectionnés:', selectedFilters);
+
     return allRecipes.filter(recipe => {
         const regimeMatch = selectedFilters.regime.length === 0 || 
             selectedFilters.regime.includes(recipe['Régime alimentaire']);
@@ -101,6 +103,11 @@ function filterRecipes() {
             selectedFilters.type.includes(recipe['Type de plat']);
         const spicyMatch = selectedFilters.spicy.length === 0 || 
             selectedFilters.spicy.includes(recipe['Niveau de piment']);
+
+        console.log('Recette:', recipe['Titre de la recette']);
+        console.log('Niveau de piment de la recette:', recipe['Niveau de piment']);
+        console.log('Filtre piment sélectionné:', selectedFilters.spicy);
+        console.log('Match piment ?', spicyMatch);
 
         return regimeMatch && portionMatch && typeMatch && spicyMatch;
     });

@@ -6,10 +6,8 @@ const API_KEY = window.env?.NETLIFY_ENV_GOOGLE_SHEETS_API_KEY || 'AIzaSyAwbiwOAp
 let allRecipes = [];
 
 async function loadRecipes() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-    
     try {
-        const response = await fetch(url);
+        const response = await fetch('/.netlify/functions/getrecipes');
         const data = await response.json();
         
         if (data.values?.length > 0) {

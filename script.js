@@ -46,7 +46,7 @@ function createRecipeCard(recipe) {
     
     if (imageUrl && imageUrl.includes('drive.google.com')) {
         const fileId = imageUrl.split('/').pop().split('=').pop();
-        imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+        imageUrl = `https://drive.google.com/file/d/${fileId}/view?usp=sharing`;
     }
     console.log('URL image transformée:', imageUrl); // Pour déboguer
 

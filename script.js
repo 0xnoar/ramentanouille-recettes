@@ -109,13 +109,13 @@ function filterRecipes() {
         if (selectedFilters.regime.includes('Sans restriction')) {
             regimeMatch = true;
         } else {
-            // Vérifier le végétarisme
-            if (selectedFilters.regime.includes('Végétarisme')) {
-                regimeMatch = recipeRegimes.includes('Végétarisme');
+            // Vérifier le véganisme (uniquement recettes véganes)
+            if (selectedFilters.regime.includes('Véganisme')) {
+                regimeMatch = recipeRegimes.includes('Véganisme');
             }
-            // Vérifier le véganisme (inclut aussi végétarisme)
-            else if (selectedFilters.regime.includes('Véganisme')) {
-                regimeMatch = recipeRegimes.includes('Véganisme') || recipeRegimes.includes('Végétarisme');
+            // Vérifier le végétarisme (inclut recettes véganes ET végétariennes)
+            else if (selectedFilters.regime.includes('Végétarisme')) {
+                regimeMatch = recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
             }
             
             // Vérifier sans gluten (peut être combiné avec végétarisme ou véganisme)
@@ -128,7 +128,7 @@ function filterRecipes() {
             }
         }
 
-        // Autres filtres restent identiques
+        // Autres filtres
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 

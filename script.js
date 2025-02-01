@@ -256,14 +256,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    document.querySelector('input[name="delivery-type"]').addEventListener('change', (event) => {
-        const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
-        if (event.target.value === 'delivery') {
-            deliveryAddress.classList.remove('hidden');
-            deliveryAddress.required = true;
-        } else {
-            deliveryAddress.classList.add('hidden');
-            deliveryAddress.required = false;
-        }
-    });
+document.querySelector('input[name="delivery-type"]').addEventListener('change', (event) => {
+    const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
+    if (event.target.value === 'delivery') {
+        deliveryAddress.classList.remove('hidden');
+        deliveryAddress.required = true;
+    } else {
+        deliveryAddress.classList.add('hidden');
+        deliveryAddress.required = false;
+    }
+});
 });

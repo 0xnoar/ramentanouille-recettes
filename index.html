@@ -104,6 +104,50 @@
             ]
         };
     </script>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commande de Repas</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="menu">
+        <div class="recette" data-nom="Bò bún">
+            <h3>Bò bún</h3>
+            <input type="number" min="0" value="0" class="quantite">
+        </div>
+        <div class="recette" data-nom="Nems au poulet x3">
+            <h3>Nems au poulet x3</h3>
+            <input type="number" min="0" value="0" class="quantite">
+        </div>
+        <div class="recette" data-nom="Salade vietnamienne">
+            <h3>Salade vietnamienne</h3>
+            <input type="number" min="0" value="0" class="quantite">
+        </div>
+    </div>
+
+    <div class="panier">
+        <h2>Votre Commande</h2>
+        <ul id="liste-panier"></ul>
+        <form id="form-commande">
+            <input type="text" id="nom" placeholder="Nom" required>
+            <input type="tel" id="telephone" placeholder="Téléphone" required>
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="date" id="date-livraison" required>
+            <input type="time" id="heure-livraison" required>
+            <select id="livraison" required>
+                <option value="retrait">À venir chercher</option>
+                <option value="livraison">À livrer</option>
+            </select>
+            <input type="text" id="adresse" placeholder="Adresse de livraison" style="display:none;">
+            <button type="submit">Commander</button>
+        </form>
+    </div>
+</body>
+</html>
     
     <main id="recipes-container">
         <!-- Les recettes seront ajoutées ici dynamiquement -->

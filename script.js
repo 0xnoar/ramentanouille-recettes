@@ -24,6 +24,57 @@ async function loadRecipes() {
         console.error('Erreur:', error);
     }
 }
+async function sendOrderEmail(orderData) {
+    // Contenu de l'email
+    const itemsList = orderData.items.map(item => 
+        `- ${item.title}: ${item.quantity}`
+    ).join('\n');
+
+    const deliveryInfo = orderData.deliveryType === 'delivery' 
+        ? `\nAdresse de livraison: ${orderData.deliveryAddress}`
+        : '\nÀ récupérer au restaurant';
+
+    const emailContent = `
+        Nouvelle commande :
+
+        Client:
+        Nom: ${orderData.customerName}
+        Téléphone: ${orderData.phone}
+        Email: ${orderData.email}
+
+        Livraison:
+        Date: ${orderData.deliveryDate}
+        Heure: ${orderData.deliveryTime}
+        ${deliveryInfo}
+
+        Articles commandés:
+        ${itemsList}
+    `;
+
+    try {
+        const response = await emailjs.send(
+            "service_hdwid4k", // Ton Service ID
+            "template_k2nup5c", // Ton Template ID
+            {
+                to_email: "ramentanouille55@gmail.com", // Email du restaurant
+                from_name: orderData.customerName,
+                message: emailContent,
+                reply_to: orderData.email
+            }
+        );
+
+        if (response.status === 200) {
+            alert('Votre commande a été envoyée avec succès !');
+            cart = []; // Vide le panier après envoi
+            displayCart();
+        } else {
+            throw new Error("Erreur lors de l'envoi");
+        }
+    } catch (error) {
+        alert("Une erreur est survenue lors de l'envoi de la commande. Veuillez réessayer.");
+        console.error("Erreur:", error);
+    }
+}
 
 // Fonction pour transformer les données en objets recettes
 function convertSheetsDataToRecipes(values) {
@@ -105,6 +156,100 @@ function filterRecipes() {
 
         let regimeMatch = false;
 
+        const content = `
+        <div class="recipe-image-container">
+            <img class="recipe-image" src="${imageUrl}" alt="${recipe['Titre de la recette']}">
+        </div>
+        <div class="recipe-content">
+            <div class="recipe-header">
+                <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+                <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
+            </div>
+            <div class="recipe-tags">
+                <span class="tag">${recipe['Régime alimentaire']}</span>
+                <span class="tag">${recipe['Type de portion']}</span>
+                <span class="tag">${recipe['Type de plat']}</span>
+            </div>
+            <div class="quantity-selector">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" min="0" value="0" class="quantity-input" data-recipe-id="${recipe.id}">
+                <button class="quantity-btn plus">+</button>
+            </div>
+        </div>
+    `;
+    // État global du panier
+let cart = [];
+
+// Fonction pour mettre à jour le panier
+function updateCart(recipeId, quantity) {
+    const recipe = allRecipes.find(r => r.id === recipeId);
+    const existingItem = cart.find(item => item.id === recipeId);
+    
+    if (quantity > 0) {
+        if (existingItem) {
+            existingItem.quantity = quantity;
+        } else {
+            cart.push({
+                id: recipeId,
+                title: recipe['Titre de la recette'],
+                quantity: quantity
+            });
+        }
+    } else {
+        cart = cart.filter(item => item.id !== recipeId);
+    }
+    
+    displayCart();
+}
+
+// Fonction pour afficher le panier
+function displayCart() {
+    const cartContainer = document.getElementById('cart-items');
+    cartContainer.innerHTML = '';
+    
+    cart.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'cart-item';
+        itemElement.innerHTML = `
+            <span>${item.title}</span>
+            <span>x${item.quantity}</span>
+        `;
+        cartContainer.appendChild(itemElement);
+    });
+    
+    // Afficher/cacher le formulaire selon si le panier est vide
+    const orderForm = document.getElementById('order-form');
+    orderForm.classList.toggle('hidden', cart.length === 0);
+}
+
+// Gestionnaire d'événements pour le formulaire
+document.getElementById('order-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const orderData = {
+        customerName: formData.get('name'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        deliveryDate: formData.get('delivery-date'),
+        deliveryTime: formData.get('delivery-time'),
+        deliveryType: formData.get('delivery-type'),
+        deliveryAddress: formData.get('delivery-address'),
+        items: cart
+    };
+
+    // Envoyer l'email (à implémenter)
+    await sendOrderEmail(orderData);
+});
+
+// Fonction pour gérer le type de livraison
+document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const addressField = document.querySelector('textarea[name="delivery-address"]');
+        addressField.classList.toggle('hidden', e.target.value === 'pickup');
+        addressField.required = e.target.value === 'delivery';
+    });
+});
         // Traitement des régimes alimentaires
         if (selectedFilters.regime.includes('Sans restriction')) {
             regimeMatch = true;

@@ -8,6 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+    (function() {
+        emailjs.init("bk_ggFzaD16z5Go8f"); // Ta clé publique
+    })();
+</script>
+
 <body>
     <header>
         <img src="logo.png" alt="Ramen Ta Nouille" class="logo">
@@ -60,6 +67,44 @@
         </div>
     </section>
 
+    <div id="cart" class="cart">
+        <h2>Votre Commande</h2>
+        <div id="cart-items"></div>
+        <form id="order-form" class="order-form hidden">
+            <input type="text" name="name" required placeholder="Nom complet">
+            <input type="tel" name="phone" required placeholder="Téléphone">
+            <input type="email" name="email" required placeholder="Email">
+            <input type="date" name="delivery-date" required>
+            <input type="time" name="delivery-time" required>
+            <div class="delivery-choice">
+                <label>
+                    <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
+                </label>
+                <label>
+                    <input type="radio" name="delivery-type" value="delivery"> Livraison
+                </label>
+            </div>
+            <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
+            <button type="submit" class="order-button">Commander</button>
+        </form>
+    </div>
+    <button onclick="sendOrderEmail(testOrder)">Envoyer Test</button>
+    <script>
+        const testOrder = {
+            customerName: "Jean Dupont",
+            phone: "0606060606",
+            email: "jean.dupont@example.com",
+            deliveryType: "delivery",
+            deliveryAddress: "123 Rue des Ramen, Paris",
+            deliveryDate: "2025-02-01",
+            deliveryTime: "12:30",
+            items: [
+                { title: "Ramen Tonkotsu", quantity: 2 },
+                { title: "Gyoza", quantity: 1 }
+            ]
+        };
+    </script>
+    
     <main id="recipes-container">
         <!-- Les recettes seront ajoutées ici dynamiquement -->
     </main>

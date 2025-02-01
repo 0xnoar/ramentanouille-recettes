@@ -1,37 +1,68 @@
-body {
-    font-family: Arial, sans-serif;
+/* ... Styles existants ... */
+
+.main-container {
+    display: flex;
+}
+
+.filters {
+    width: 20%;
+}
+
+#recipes-container {
+    width: 60%;
+}
+
+.cart {
+    width: 20%;
+    background-color: var(--light-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart h2 {
+    margin-top: 0;
+}
+
+.cart-item {
     display: flex;
     justify-content: space-between;
-    padding: 20px;
-}
-
-.menu {
-    width: 60%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.recette {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-    width: 30%;
-}
-
-.panier {
-    width: 35%;
-    border: 1px solid #ddd;
-    padding: 10px;
-    background: #f9f9f9;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form input, form select, form button {
+    align-items: center;
     margin-bottom: 10px;
-    padding: 5px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-control button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+.order-form input, 
+.order-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.delivery-choice {
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+.order-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }

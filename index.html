@@ -8,13 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-    (function() {
-        emailjs.init("bk_ggFzaD16z5Go8f"); // Ta clé publique
-    })();
-</script>
-
 <body>
     <header>
         <img src="logo.png" alt="Ramen Ta Nouille" class="logo">
@@ -24,139 +17,48 @@
         </div>
     </header>
 
-    <nav>
-        <ul>
-          
-        </ul>
-    </nav>
+    <div class="main-container">
+        <section class="filters" id="filters">
+            <!-- ... -->
+        </section>
 
-    <section class="filters" id="filters">
-        <h2>Filtres</h2>
-        
-        <div class="filter-group">
-            <h3>Régime alimentaire</h3>
-            <label><input type="checkbox" name="regime" value="Sans restriction"> Sans restriction</label>
-            <label><input type="checkbox" name="regime" value="Véganisme"> Véganisme</label>
-            <label><input type="checkbox" name="regime" value="Végétarisme"> Végétarisme</label>
-            <label><input type="checkbox" name="regime" value="Sans gluten"> Sans gluten</label>
-            <p class="info-message">
-                ⚠️ Seulement l'option "Sans gluten" peut être combinée au végétarisme et au véganisme.<br>
-                Les autres options ne peuvent pas être combinées.
-            </p>
-        </div>
+        <main id="recipes-container">
+            <!-- Les recettes seront ajoutées ici dynamiquement -->
+        </main>
 
-        <div class="filter-group">
-            <h3>Type de portion</h3>
-            <label><input type="checkbox" name="portion" value="Plat à partager"> Plat à partager</label>
-            <label><input type="checkbox" name="portion" value="Portions individuelles"> Portions individuelles</label>
-        </div>
-
-        <div class="filter-group">
-            <h3>Type de plat</h3>
-            <label><input type="checkbox" name="type" value="Entrée"> Entrée</label>
-            <label><input type="checkbox" name="type" value="Plat principal"> Plat principal</label>
-            <label><input type="checkbox" name="type" value="Dessert"> Dessert</label>
-        </div>
-
-        <div class="filter-group">
-            <h3>Niveau de piment</h3>
-            <label><input type="checkbox" name="spicy" value="Non pimenté"> Non pimenté</label>
-            <label><input type="checkbox" name="spicy" value="🌶️ Léger"> 🌶️ Léger</label>
-            <label><input type="checkbox" name="spicy" value="🌶️🌶️ Moyen"> 🌶️🌶️ Moyen</label>
-            <label><input type="checkbox" name="spicy" value="🌶️🌶️🌶️ Fort"> 🌶️🌶️🌶️ Fort</label>
-        </div>
-    </section>
-
-    <div id="cart" class="cart">
-        <h2>Votre Commande</h2>
-        <div id="cart-items"></div>
-        <form id="order-form" class="order-form hidden">
-            <input type="text" name="name" required placeholder="Nom complet">
-            <input type="tel" name="phone" required placeholder="Téléphone">
-            <input type="email" name="email" required placeholder="Email">
-            <input type="date" name="delivery-date" required>
-            <input type="time" name="delivery-time" required>
-            <div class="delivery-choice">
-                <label>
-                    <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
-                </label>
-                <label>
-                    <input type="radio" name="delivery-type" value="delivery"> Livraison
-                </label>
-            </div>
-            <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
-            <button type="submit" class="order-button">Commander</button>
-        </form>
-    </div>
-    <button onclick="sendOrderEmail(testOrder)">Envoyer Test</button>
-    <script>
-        const testOrder = {
-            customerName: "Jean Dupont",
-            phone: "0606060606",
-            email: "jean.dupont@example.com",
-            deliveryType: "delivery",
-            deliveryAddress: "123 Rue des Ramen, Paris",
-            deliveryDate: "2025-02-01",
-            deliveryTime: "12:30",
-            items: [
-                { title: "Ramen Tonkotsu", quantity: 2 },
-                { title: "Gyoza", quantity: 1 }
-            ]
-        };
-    </script>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande de Repas</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
-</head>
-<body>
-    <div class="menu">
-        <div class="recette" data-nom="Bò bún">
-            <h3>Bò bún</h3>
-            <input type="number" min="0" value="0" class="quantite">
-        </div>
-        <div class="recette" data-nom="Nems au poulet x3">
-            <h3>Nems au poulet x3</h3>
-            <input type="number" min="0" value="0" class="quantite">
-        </div>
-        <div class="recette" data-nom="Salade vietnamienne">
-            <h3>Salade vietnamienne</h3>
-            <input type="number" min="0" value="0" class="quantite">
+        <div id="cart" class="cart">
+            <h2>Votre Commande</h2>
+            <div id="cart-items"></div>
+            <form id="order-form" class="order-form hidden">
+                <input type="text" name="name" required placeholder="Nom complet">
+                <input type="tel" name="phone" required placeholder="Téléphone">
+                <input type="email" name="email" required placeholder="Email">
+                <input type="date" name="delivery-date" required>
+                <input type="time" name="delivery-time" required>
+                <div class="delivery-choice">
+                    <label>
+                        <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
+                    </label>
+                    <label>
+                        <input type="radio" name="delivery-type" value="delivery"> Livraison
+                    </label>
+                </div>
+                <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
+                <button type="submit" class="order-button">Commander</button>
+            </form>
         </div>
     </div>
-
-    <div class="panier">
-        <h2>Votre Commande</h2>
-        <ul id="liste-panier"></ul>
-        <form id="form-commande">
-            <input type="text" id="nom" placeholder="Nom" required>
-            <input type="tel" id="telephone" placeholder="Téléphone" required>
-            <input type="email" id="email" placeholder="E-mail" required>
-            <input type="date" id="date-livraison" required>
-            <input type="time" id="heure-livraison" required>
-            <select id="livraison" required>
-                <option value="retrait">À venir chercher</option>
-                <option value="livraison">À livrer</option>
-            </select>
-            <input type="text" id="adresse" placeholder="Adresse de livraison" style="display:none;">
-            <button type="submit">Commander</button>
-        </form>
-    </div>
-</body>
-</html>
-    
-    <main id="recipes-container">
-        <!-- Les recettes seront ajoutées ici dynamiquement -->
-    </main>
 
     <footer>
         <p>&copy; 2023 Ramen Ta Nouille. Tous droits réservés.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("bk_ggFzaD16z5Go8f"); // Ta clé publique EmailJS 
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

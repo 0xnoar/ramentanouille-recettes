@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://sheets.googleapis.com https://drive.google.com 'unsafe-inline' 'unsafe-eval'; img-src * 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://sheets.googleapis.com https://drive.google.com 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://api.emailjs.com; img-src * 'self' data: https:;">
     <title>Ramen Ta Nouille - Recettes</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
@@ -60,6 +60,12 @@
         </main>
     </div>
 
+    <!-- Bouton panier -->
+    <button id="cartToggle" class="cart-toggle">
+        🛒 <span class="cart-count">0</span>
+    </button>
+
+    <!-- Panier -->
     <div id="cart" class="cart">
         <h2>Votre Commande</h2>
         <div id="cart-items"></div>
@@ -82,17 +88,16 @@
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script>
-        (function() {
-            emailjs.init("bk_ggFzaD16z5Go8f"); // Ta clé publique EmailJS 
-        })();
-    </script>
-    <script src="script.js"></script>
-    
     <footer>
         <p>&copy; 2023 Ramen Ta Nouille. Tous droits réservés.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("bk_ggFzaD16z5Go8f");
+        })();
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>

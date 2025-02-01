@@ -93,14 +93,29 @@ function filterRecipes() {
     };
 
     return allRecipes.filter(recipe => {
-        // Sépare les régimes alimentaires multiples en tableau
-        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
-        
-        // Vérifie si tous les régimes sélectionnés sont présents dans la recette
-        const regimeMatch = selectedFilters.regime.length === 0 || 
-            selectedFilters.regime.every(selectedRegime => 
-                recipeRegimes.includes(selectedRegime)
-            );
+        // Gestion du régime alimentaire
+        let regimeMatch = true;
+        if (selectedFilters.regime.length > 0) {
+            const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+            
+            // Si "Sans restriction" est sélectionné, afficher toutes les recettes
+            if (selectedFilters.regime.includes('Sans restriction')) {
+                regimeMatch = true;
+            }
+            // Gestion du végétarisme
+            else if (selectedFilters.regime.includes('Végétarisme')) {
+                regimeMatch = recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
+            }
+            // Gestion du véganisme
+            else if (selectedFilters.regime.includes('Véganisme')) {
+                regimeMatch = recipeRegimes.includes('Véganisme');
+            }
+            
+            // Gestion du sans gluten en combinaison
+            if (selectedFilters.regime.includes('Sans gluten')) {
+                regimeMatch = regimeMatch && recipeRegimes.includes('Sans gluten');
+            }
+        }
 
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);

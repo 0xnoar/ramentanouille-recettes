@@ -92,22 +92,22 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
-    console.log('Filtres sélectionnés:', selectedFilters);
-
     return allRecipes.filter(recipe => {
+        // Sépare les régimes alimentaires multiples en tableau
+        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+        
+        // Vérifie si tous les régimes sélectionnés sont présents dans la recette
         const regimeMatch = selectedFilters.regime.length === 0 || 
-            selectedFilters.regime.includes(recipe['Régime alimentaire']);
+            selectedFilters.regime.every(selectedRegime => 
+                recipeRegimes.includes(selectedRegime)
+            );
+
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 
             selectedFilters.type.includes(recipe['Type de plat']);
         const spicyMatch = selectedFilters.spicy.length === 0 || 
             selectedFilters.spicy.includes(recipe['Niveau de piment']);
-
-        console.log('Recette:', recipe['Titre de la recette']);
-        console.log('Niveau de piment de la recette:', recipe['Niveau de piment']);
-        console.log('Filtre piment sélectionné:', selectedFilters.spicy);
-        console.log('Match piment ?', spicyMatch);
 
         return regimeMatch && portionMatch && typeMatch && spicyMatch;
     });

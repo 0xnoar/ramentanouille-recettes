@@ -28,7 +28,8 @@
                 <label><input type="checkbox" name="regime" value="Végétarisme"> Végétarisme</label>
                 <label><input type="checkbox" name="regime" value="Sans gluten"> Sans gluten</label>
                 <p class="info-message">
-                    ⚠️ Seulement l'option végétarisme inclu les recttes véganes.
+                    ⚠️ Seulement l'option "Sans gluten" peut être combinée au végétarisme et au véganisme.<br>
+                    Les autres options ne peuvent pas être combinées.
                 </p>
             </div>
 
@@ -57,11 +58,12 @@
         <main id="recipes-container">
             <!-- Les recettes seront ajoutées ici dynamiquement -->
         </main>
-        
-        <div id="cart" class="cart">
-            <h2>Votre Commande</h2>
-            <div id="cart-items"></div>
-            <form id="order-form" class="order-form hidden">
+    </div>
+
+    <div id="cart" class="cart">
+        <h2>Votre Commande</h2>
+        <div id="cart-items"></div>
+        <form id="order-form" class="order-form hidden">
             <input type="text" name="name" required placeholder="Nom complet">
             <input type="tel" name="phone" required placeholder="Téléphone">
             <input type="email" name="email" required placeholder="Email">
@@ -80,10 +82,6 @@
         </form>
     </div>
 
-    <footer>
-        <p>&copy; 2023 Ramen Ta Nouille. Tous droits réservés.</p>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
         (function() {
@@ -91,5 +89,10 @@
         })();
     </script>
     <script src="script.js"></script>
+    
+    <footer>
+        <p>&copy; 2023 Ramen Ta Nouille. Tous droits réservés.</p>
+    </footer>
+
 </body>
 </html>

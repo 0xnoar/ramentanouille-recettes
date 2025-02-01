@@ -83,7 +83,7 @@ function createRecipeCard(recipe) {
     return card;
 }
 
-// Fonction pour filtrer les recettes
+// Dans la fonction filterRecipes
 function filterRecipes() {
     const selectedFilters = {
         regime: Array.from(document.querySelectorAll('input[name="regime"]:checked')).map(cb => cb.value),
@@ -92,31 +92,43 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
+    console.log('Filtres sélectionnés:', selectedFilters);
+
     return allRecipes.filter(recipe => {
-        // Gestion du régime alimentaire
-        let regimeMatch = true;
-        if (selectedFilters.regime.length > 0) {
-            const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
-            
-            // Si "Sans restriction" est sélectionné, afficher toutes les recettes
-            if (selectedFilters.regime.includes('Sans restriction')) {
-                regimeMatch = true;
+        // Si aucun filtre de régime n'est sélectionné, montrer toutes les recettes
+        if (selectedFilters.regime.length === 0) {
+            return true;
+        }
+
+        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+        console.log('Régimes de la recette:', recipeRegimes);
+
+        let regimeMatch = false;
+
+        // Traitement des régimes alimentaires
+        if (selectedFilters.regime.includes('Sans restriction')) {
+            regimeMatch = true;
+        } else {
+            // Vérifier le végétarisme
+            if (selectedFilters.regime.includes('Végétarisme')) {
+                regimeMatch = recipeRegimes.includes('Végétarisme');
             }
-            // Gestion du végétarisme
-            else if (selectedFilters.regime.includes('Végétarisme')) {
-                regimeMatch = recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
-            }
-            // Gestion du véganisme
+            // Vérifier le véganisme (inclut aussi végétarisme)
             else if (selectedFilters.regime.includes('Véganisme')) {
-                regimeMatch = recipeRegimes.includes('Véganisme');
+                regimeMatch = recipeRegimes.includes('Véganisme') || recipeRegimes.includes('Végétarisme');
             }
             
-            // Gestion du sans gluten en combinaison
+            // Vérifier sans gluten (peut être combiné avec végétarisme ou véganisme)
             if (selectedFilters.regime.includes('Sans gluten')) {
-                regimeMatch = regimeMatch && recipeRegimes.includes('Sans gluten');
+                if (regimeMatch) {
+                    regimeMatch = recipeRegimes.includes('Sans gluten');
+                } else {
+                    regimeMatch = recipeRegimes.includes('Sans gluten');
+                }
             }
         }
 
+        // Autres filtres restent identiques
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 

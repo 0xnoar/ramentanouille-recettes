@@ -60,7 +60,8 @@ header h1 {
 .main-container {
     display: flex;
     flex-grow: 1;
-}
+    position: relative; /* Ajouté */
+    padding-right: 320px; /* Ajouté */
 
 .filters {
     width: 20%;
@@ -185,11 +186,11 @@ header h1 {
 }
 
 .cart {
-    position: fixed;
-    top: 0;
-    right: 0;
+    position: absolute; /* Modifié */
+    top: 0; /* Ajouté */
+    right: 0; /* Ajouté */
     width: 300px;
-    height: 100vh;
+    min-height: 100vh;
     background-color: var(--light-color);
     padding: 20px;
     box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);

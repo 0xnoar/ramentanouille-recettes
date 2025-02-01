@@ -21,65 +21,35 @@
         <section class="filters" id="filters">
             <h2>Filtres</h2>
             
-            <div class="filter-group">
-                <h3>Régime alimentaire</h3>
-                <label><input type="checkbox" name="regime" value="Sans restriction"> Sans restriction</label>
-                <label><input type="checkbox" name="regime" value="Véganisme"> Véganisme</label>
-                <label><input type="checkbox" name="regime" value="Végétarisme"> Végétarisme</label>
-                <label><input type="checkbox" name="regime" value="Sans gluten"> Sans gluten</label>
-                <p class="info-message">
-                    ⚠️ Seulement l'option "Sans gluten" peut être combinée au végétarisme et au véganisme.<br>
-                    Les autres options ne peuvent pas être combinées.
-                </p>
-            </div>
-
-            <div class="filter-group">
-                <h3>Type de portion</h3>
-                <label><input type="checkbox" name="portion" value="Plat à partager"> Plat à partager</label>
-                <label><input type="checkbox" name="portion" value="Portions individuelles"> Portions individuelles</label>
-            </div>
-
-            <div class="filter-group">
-                <h3>Type de plat</h3>
-                <label><input type="checkbox" name="type" value="Entrée"> Entrée</label>
-                <label><input type="checkbox" name="type" value="Plat principal"> Plat principal</label>
-                <label><input type="checkbox" name="type" value="Dessert"> Dessert</label>
-            </div>
-
-            <div class="filter-group">
-                <h3>Niveau de piment</h3>
-                <label><input type="checkbox" name="spicy" value="Non pimenté"> Non pimenté</label>
-                <label><input type="checkbox" name="spicy" value="🌶️ Léger"> 🌶️ Léger</label>
-                <label><input type="checkbox" name="spicy" value="🌶️🌶️ Moyen"> 🌶️🌶️ Moyen</label>
-                <label><input type="checkbox" name="spicy" value="🌶️🌶️🌶️ Fort"> 🌶️🌶️🌶️ Fort</label>
-            </div>
+            <!-- ... -->
+            
         </section>
 
         <main id="recipes-container">
             <!-- Les recettes seront ajoutées ici dynamiquement -->
         </main>
-    </div>
 
-    <div id="cart" class="cart">
-        <h2>Votre Commande</h2>
-        <div id="cart-items"></div>
-        <form id="order-form" class="order-form hidden">
-            <input type="text" name="name" required placeholder="Nom complet">
-            <input type="tel" name="phone" required placeholder="Téléphone">
-            <input type="email" name="email" required placeholder="Email">
-            <input type="date" name="delivery-date" required>
-            <input type="time" name="delivery-time" required>
-            <div class="delivery-choice">
-                <label>
-                    <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
-                </label>
-                <label>
-                    <input type="radio" name="delivery-type" value="delivery"> Livraison
-                </label>
-            </div>
-            <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
-            <button type="submit" class="order-button">Commander</button>
-        </form>
+        <div id="cart" class="cart">
+            <h2>Votre Commande</h2>
+            <div id="cart-items"></div>
+            <form id="order-form" class="order-form hidden">
+                <input type="text" name="name" required placeholder="Nom complet">
+                <input type="tel" name="phone" required placeholder="Téléphone">
+                <input type="email" name="email" required placeholder="Email">
+                <input type="date" name="delivery-date" required>
+                <input type="time" name="delivery-time" required>
+                <div class="delivery-choice">
+                    <label>
+                        <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
+                    </label>
+                    <label>
+                        <input type="radio" name="delivery-type" value="delivery"> Livraison
+                    </label>
+                </div>
+                <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
+                <button type="submit" class="order-button">Commander</button>
+            </form>
+        </div>
     </div>
 
     <footer>

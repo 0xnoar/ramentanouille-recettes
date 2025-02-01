@@ -186,24 +186,54 @@ header h1 {
 
 .cart {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 300px;
+    top: 0;
+    right: -320px; /* Caché par défaut */
+    width: 320px;
+    height: 100vh;
     background-color: var(--light-color);
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
-.cart h2 {
-    margin-top: 0;
+.cart.open {
+    right: 0;
 }
 
+/* Bouton pour ouvrir/fermer le panier */
+.cart-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1001;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Style pour les items du panier */
 .cart-item {
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+}
+
+.cart-item-quantity {
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 2px 8px;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-left: 10px;
 }
 
 .order-form {

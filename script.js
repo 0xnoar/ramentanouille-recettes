@@ -1,8 +1,29 @@
+// Configuration
 const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
 const API_KEY = 'AIzaSyAwbiwOApYCVJoQMDIvsY2SwqT39nAMLgk';
 
 let allRecipes = [];
+
+// Fonction pour transformer les URLs Google Drive
+function getGoogleDriveImageUrl(url) {
+    if (!url) return 'placeholder.jpg';
+    
+    if (url.includes('drive.google.com')) {
+        let fileId;
+        
+        if (url.includes('/file/d/')) {
+            fileId = url.split('/file/d/')[1].split('/')[0];
+        } else if (url.includes('id=')) {
+            fileId = url.split('id=')[1];
+        }
+        
+        if (fileId) {
+            return `https://drive.google.com/uc?export=view&id=${fileId}`;
+        }
+    }
+    return url;
+}
 
 // Fonction pour charger les recettes depuis Google Sheets
 async function loadRecipes() {
@@ -16,7 +37,7 @@ async function loadRecipes() {
 
         if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
-            console.log('Recettes converties:', allRecipes); // Pour déboguer
+            console.log('Recettes converties:', allRecipes);
             displayRecipes(allRecipes);
             updateRecipeCounter(allRecipes.length);
         }
@@ -28,31 +49,21 @@ async function loadRecipes() {
 // Fonction pour transformer les données en objets recettes
 function convertSheetsDataToRecipes(values) {
     const headers = values[0].map(header => header.trim());
-    console.log('En-têtes trouvés:', headers); // Pour déboguer
-
     return values.slice(1).map(row => {
         const recipe = {};
         headers.forEach((header, index) => {
             recipe[header] = row[index] ? row[index].trim() : '';
         });
-        recipe.quantity = 0; // Ajouter la propriété quantité
-        console.log('Recette créée:', recipe); // Pour déboguer
+        recipe.quantity = 0;
         return recipe;
     });
 }
 
 function createRecipeCard(recipe) {
-    let imageUrl = recipe['Photo de la recette'];
-    console.log('URL image originale:', imageUrl); // Pour déboguer
-    
-    if (imageUrl && imageUrl.includes('drive.google.com')) {
-        const fileId = imageUrl.split('/').pop().split('=').pop();
-        imageUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-    }
-    console.log('URL image transformée:', imageUrl); // Pour déboguer
-
     const card = document.createElement('div');
     card.classList.add('recipe-card');
+
+    const imageUrl = getGoogleDriveImageUrl(recipe['Photo de la recette']);
 
     const content = `
         <div class="recipe-image-container">
@@ -76,17 +87,22 @@ function createRecipeCard(recipe) {
                 <h4>Instructions :</h4>
                 <p>${recipe['La cheffe vous conseille'] || ''}</p>
             </div>
+            <div class="quantity-control">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" min="0" value="${recipe.quantity}" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
         </div>
     `;
 
     card.innerHTML = content;
 
-    const quantityControl = document.createElement('div');
-    quantityControl.classList.add('quantity-control');
+    // Ajout des gestionnaires d'événements pour les boutons quantité
+    const minusBtn = card.querySelector('.minus');
+    const plusBtn = card.querySelector('.plus');
+    const quantityInput = card.querySelector('.quantity-input');
 
-    const minusButton = document.createElement('button');
-    minusButton.textContent = '-';
-    minusButton.addEventListener('click', () => {
+    minusBtn.addEventListener('click', () => {
         if (recipe.quantity > 0) {
             recipe.quantity--;
             quantityInput.value = recipe.quantity;
@@ -94,29 +110,18 @@ function createRecipeCard(recipe) {
         }
     });
 
-    const quantityInput = document.createElement('input');
-    quantityInput.type = 'number';
-    quantityInput.min = '0';
-    quantityInput.value = '0';
-    quantityInput.addEventListener('input', () => {
-        recipe.quantity = parseInt(quantityInput.value);
-        updateCart();
-    });
-
-    const plusButton = document.createElement('button');
-    plusButton.textContent = '+';
-    plusButton.addEventListener('click', () => {
+    plusBtn.addEventListener('click', () => {
         recipe.quantity++;
         quantityInput.value = recipe.quantity;
         updateCart();
     });
 
-    quantityControl.appendChild(minusButton);
-    quantityControl.appendChild(quantityInput);
-    quantityControl.appendChild(plusButton);
-
-    const recipeContent = card.querySelector('.recipe-content');
-    recipeContent.appendChild(quantityControl);
+    quantityInput.addEventListener('change', () => {
+        const value = parseInt(quantityInput.value) || 0;
+        recipe.quantity = Math.max(0, value);
+        quantityInput.value = recipe.quantity;
+        updateCart();
+    });
 
     return card;
 }
@@ -130,6 +135,7 @@ function displayRecipes(recipes) {
         const card = createRecipeCard(recipe);
         container.appendChild(card);
     });
+    updateRecipeCounter(recipes.length);
 }
 
 // Fonction pour mettre à jour le compteur
@@ -148,29 +154,32 @@ function updateCart() {
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
 
-        const title = document.createElement('span');
-        title.textContent = `${recipe['Titre de la recette']} x${recipe.quantity}`;
+        const itemInfo = document.createElement('div');
+        itemInfo.classList.add('cart-item-info');
+        itemInfo.innerHTML = `
+            <div class="cart-item-title">${recipe['Titre de la recette']}</div>
+            <div class="cart-item-quantity">Quantité: ${recipe.quantity}</div>
+        `;
 
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'X';
+        removeButton.classList.add('cart-item-remove');
+        removeButton.innerHTML = '×';
         removeButton.addEventListener('click', () => {
             recipe.quantity = 0;
             updateCart();
             displayRecipes(allRecipes);
         });
 
-        cartItem.appendChild(title);
+        cartItem.appendChild(itemInfo);
         cartItem.appendChild(removeButton);
-
         cartItems.appendChild(cartItem);
     });
 
     const orderForm = document.getElementById('order-form');
-    if (selectedRecipes.length > 0) {
-        orderForm.classList.remove('hidden');
-    } else {
-        orderForm.classList.add('hidden');
-    }
+    orderForm.classList.toggle('hidden', selectedRecipes.length === 0);
+
+    // Mettre à jour le compteur du panier
+    document.querySelector('.cart-count').textContent = selectedRecipes.reduce((sum, recipe) => sum + recipe.quantity, 0);
 }
 
 // Fonction de filtrage des recettes
@@ -184,27 +193,44 @@ function filterRecipes() {
 
     let filteredRecipes = [...allRecipes];
 
-    if (selectedFilters.regime.length > 0) {
-        filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.regime.includes(recipe['Régime alimentaire']?.trim())
-        );
+    // Filtrage régime alimentaire
+    if (selectedFilters.regime.includes('Sans restriction')) {
+        // Afficher toutes les recettes
+    } else if (selectedFilters.regime.length > 0) {
+        filteredRecipes = filteredRecipes.filter(recipe => {
+            const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+            
+            if (selectedFilters.regime.includes('Véganisme')) {
+                return recipeRegimes.includes('Véganisme');
+            }
+            if (selectedFilters.regime.includes('Végétarisme')) {
+                return recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
+            }
+            // Gestion du sans gluten
+            if (selectedFilters.regime.includes('Sans gluten')) {
+                return recipeRegimes.includes('Sans gluten');
+            }
+            
+            return selectedFilters.regime.some(filter => recipeRegimes.includes(filter));
+        });
     }
 
+    // Autres filtres
     if (selectedFilters.portion.length > 0) {
         filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.portion.includes(recipe['Type de portion']?.trim())
+            selectedFilters.portion.includes(recipe['Type de portion'])
         );
     }
 
     if (selectedFilters.type.length > 0) {
         filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.type.includes(recipe['Type de plat']?.trim())
+            selectedFilters.type.includes(recipe['Type de plat'])
         );
     }
 
     if (selectedFilters.spicy.length > 0) {
         filteredRecipes = filteredRecipes.filter(recipe => 
-            selectedFilters.spicy.includes(recipe['Niveau de piquant']?.trim())
+            selectedFilters.spicy.includes(recipe['Niveau de piment'])
         );
     }
 
@@ -216,10 +242,17 @@ function filterRecipes() {
 document.addEventListener('DOMContentLoaded', () => {
     loadRecipes();
     
+    // Gestionnaire pour les filtres
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', filterRecipes);
     });
 
+    // Gestionnaire pour le toggle du panier
+    document.getElementById('cartToggle').addEventListener('click', () => {
+        document.getElementById('cart').classList.toggle('open');
+    });
+
+    // Gestionnaire pour le formulaire de commande
     document.getElementById('order-form').addEventListener('submit', (event) => {
         event.preventDefault();
 
@@ -240,30 +273,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }))
         };
 
-        console.log(orderDetails); // Pour les tests, à retirer en production
-
         emailjs.send('service_hdwid4k', 'template_k2nup5c', orderDetails)
-            .then(function(response) {
+            .then(response => {
                 console.log('Commande envoyée', response.status, response.text);
                 alert('Votre commande a été envoyée avec succès !');
                 form.reset();
                 allRecipes.forEach(recipe => recipe.quantity = 0);
                 updateCart();
                 displayRecipes(allRecipes);
-            }, function(error) {
-                console.log('Erreur', error);
+            })
+            .catch(error => {
+                console.error('Erreur', error);
                 alert('Une erreur est survenue, veuillez réessayer.');
             });
     });
 
-document.querySelector('input[name="delivery-type"]').addEventListener('change', (event) => {
-    const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
-    if (event.target.value === 'delivery') {
-        deliveryAddress.classList.remove('hidden');
-        deliveryAddress.required = true;
-    } else {
-        deliveryAddress.classList.add('hidden');
-        deliveryAddress.required = false;
-    }
-});
+    // Gestionnaire pour le type de livraison
+    document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
+        radio.addEventListener('change', (event) => {
+            const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
+            deliveryAddress.classList.toggle('hidden', event.target.value === 'pickup');
+            deliveryAddress.required = event.target.value === 'delivery';
+        });
+    });
 });

@@ -28,7 +28,8 @@
                 <label><input type="checkbox" name="regime" value="Végétarisme"> Végétarisme</label>
                 <label><input type="checkbox" name="regime" value="Sans gluten"> Sans gluten</label>
                 <p class="info-message">
-                    ⚠️ Seulement l'option végétarisme affiche les recettes véganes.
+                    ⚠️ Seulement l'option "Sans gluten" peut être combinée au végétarisme et au véganisme.<br>
+                    Les autres options ne peuvent pas être combinées.
                 </p>
             </div>
 
@@ -57,28 +58,28 @@
         <main id="recipes-container">
             <!-- Les recettes seront ajoutées ici dynamiquement -->
         </main>
+    </div>
 
-        <div id="cart" class="cart">
-            <h2>Votre Commande</h2>
-            <div id="cart-items"></div>
-            <form id="order-form" class="order-form hidden">
-                <input type="text" name="name" required placeholder="Nom complet">
-                <input type="tel" name="phone" required placeholder="Téléphone">
-                <input type="email" name="email" required placeholder="Email">
-                <input type="date" name="delivery-date" required>
-                <input type="time" name="delivery-time" required>
-                <div class="delivery-choice">
-                    <label>
-                        <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
-                    </label>
-                    <label>
-                        <input type="radio" name="delivery-type" value="delivery"> Livraison
-                    </label>
-                </div>
-                <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
-                <button type="submit" class="order-button">Commander</button>
-            </form>
-        </div>
+    <div id="cart" class="cart">
+        <h2>Votre Commande</h2>
+        <div id="cart-items"></div>
+        <form id="order-form" class="order-form hidden">
+            <input type="text" name="name" required placeholder="Nom complet">
+            <input type="tel" name="phone" required placeholder="Téléphone">
+            <input type="email" name="email" required placeholder="Email">
+            <input type="date" name="delivery-date" required>
+            <input type="time" name="delivery-time" required>
+            <div class="delivery-choice">
+                <label>
+                    <input type="radio" name="delivery-type" value="pickup" checked> À venir chercher
+                </label>
+                <label>
+                    <input type="radio" name="delivery-type" value="delivery"> Livraison
+                </label>
+            </div>
+            <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
+            <button type="submit" class="order-button">Commander</button>
+        </form>
     </div>
 
     <footer>

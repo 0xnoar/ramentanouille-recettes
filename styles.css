@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #f7b2c7; 
+    --primary-color: #f7b2c7;
     --secondary-color: #f0e45c;
     --accent-color: #000;
     --light-color: #fff;
@@ -17,6 +17,9 @@ body {
     line-height: 1.6;
     background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 h1, h2, h3 {
@@ -56,6 +59,7 @@ header h1 {
 
 .main-container {
     display: flex;
+    flex-grow: 1;
 }
 
 .filters {
@@ -82,7 +86,7 @@ header h1 {
 }
 
 #recipes-container {
-    width: 60%;
+    width: 80%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
@@ -96,6 +100,7 @@ header h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.5s ease-in;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
 .recipe-card:hover {
@@ -136,7 +141,7 @@ header h1 {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
-    flex-wrap: wrap;  
+    flex-wrap: wrap;
 }
 
 .recipe-tags .tag {
@@ -157,9 +162,11 @@ header h1 {
 }
 
 .quantity-control {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
     display: flex;
     align-items: center;
-    margin-top: 15px;
 }
 
 .quantity-control button {
@@ -178,11 +185,15 @@ header h1 {
 }
 
 .cart {
-    width: 20%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100vh;
     background-color: var(--light-color);
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 .cart h2 {
@@ -196,7 +207,11 @@ header h1 {
     margin-bottom: 10px;
 }
 
-.order-form input, 
+.order-form {
+    margin-top: 20px;
+}
+
+.order-form input,
 .order-form textarea {
     width: 100%;
     padding: 10px;

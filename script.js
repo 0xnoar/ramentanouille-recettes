@@ -61,10 +61,9 @@ function createRecipeCard(recipe) {
         </div>
         <div class="recipe-content">
             <div class="recipe-header">
-                <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
-                <div class="recipe-price">${parseFloat(recipe['Prix']).toFixed(2)} €</div>
-                <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
-            </div>
+             <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+             <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
+        </div>
             <div class="recipe-tags">
                 <span class="tag">${recipe['Régime alimentaire']}</span>
                 <span class="tag">${recipe['Type de portion']}</span>
@@ -82,9 +81,10 @@ function createRecipeCard(recipe) {
                 <button class="quantity-btn minus">-</button>
                 <input type="number" min="0" value="${recipe.quantity}" class="quantity-input">
                 <button class="quantity-btn plus">+</button>
+                <span class="price">${parseFloat(recipe['Prix']).toFixed(2)} €</span>
             </div>
         </div>
-    `;
+`;
 
     card.innerHTML = content;
 

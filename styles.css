@@ -292,33 +292,28 @@ header img.logo {
 
 .delivery-choice,
 .payment-choice {
-    margin: 5px 0; /* Réduit la marge verticale */
+    margin: 15px 0;
     width: 100%;
 }
 
 .delivery-choice label,
 .payment-choice label {
     display: flex;
-    align-items: center; /* Change flex-start à center */
-    gap: 5px; /* Réduit l'espace entre le bouton radio et le texte */
-    margin-bottom: 5px; /* Réduit l'espace entre les options */
-    min-width: 200px;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    min-width: 200px; /* Largeur minimale pour éviter la troncation */
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
     margin: 0;
-    flex-shrink: 0;
-}
-
-.payment-choice h4 {
-    margin: 5px 0; /* Réduit la marge autour du titre */
-    font-size: 1em; /* Ajuste la taille du titre */
+    flex-shrink: 0; /* Empêche le bouton radio de rétrécir */
 }
 
 .payment-choice label span {
-    flex-grow: 1;
-    padding-right: 5px; /* Réduit le padding */
+    flex-grow: 1; /* Permet au texte d'utiliser l'espace disponible */
+    padding-right: 10px; /* Ajoute un peu d'espace à droite */
 }
 /* Styles pour le bouton Commander */
 .order-button {

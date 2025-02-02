@@ -293,30 +293,27 @@ header img.logo {
 .delivery-choice,
 .payment-choice {
     margin: 15px 0;
-    width: 100%; /* Assure que le conteneur prend toute la largeur */
+    width: 100%;
 }
 
 .delivery-choice label,
 .payment-choice label {
-    display: grid;
-    grid-template-columns: auto minmax(200px, 1fr); /* Force une largeur minimale pour le texte */
-    align-items: start;
+    display: flex;
+    align-items: flex-start;
     gap: 10px;
     margin-bottom: 10px;
+    min-width: 200px; /* Largeur minimale pour éviter la troncation */
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
     margin: 0;
-    margin-top: 3px;
+    flex-shrink: 0; /* Empêche le bouton radio de rétrécir */
 }
 
-/* Nouveau style pour assurer que le texte est visible en entier */
-.delivery-choice label span,
 .payment-choice label span {
-    white-space: nowrap;
-    overflow: visible;
-    width: 100%;
+    flex-grow: 1; /* Permet au texte d'utiliser l'espace disponible */
+    padding-right: 10px; /* Ajoute un peu d'espace à droite */
 }
 
 .payment-choice {

@@ -297,15 +297,18 @@ header img.logo {
 
 .delivery-choice label,
 .payment-choice label {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
     gap: 10px;
     margin-bottom: 10px;
+    white-space: nowrap;
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
     margin: 0;
+    margin-top: 3px; /* Pour aligner avec la première ligne de texte */
 }
 
 .payment-choice {

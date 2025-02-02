@@ -130,7 +130,16 @@ function filterRecipes() {
             return true;
         }
 
-        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+        let recipeRegimes = recipe['Régime alimentaire'];
+        
+        // Vérifier si les régimes sont dans une seule cellule, séparés par des virgules
+        if (typeof recipeRegimes === 'string') {
+            recipeRegimes = recipeRegimes.split(',').map(r => r.trim());
+        }
+        // Sinon, supposer que chaque régime est dans une cellule séparée
+        else if (!Array.isArray(recipeRegimes)) {
+            recipeRegimes = [recipeRegimes];
+        }
 
         let regimeMatch = false;
 
@@ -167,7 +176,6 @@ function filterRecipes() {
         return regimeMatch && portionMatch && typeMatch && spicyMatch;
     });
 }
-
 // Fonction pour afficher les recettes
 function displayRecipes(recipes) {
     const container = document.getElementById('recipes-container');

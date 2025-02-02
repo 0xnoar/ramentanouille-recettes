@@ -292,29 +292,37 @@ header img.logo {
 
 .delivery-choice,
 .payment-choice {
-    margin: 15px 0;
+    margin: 5px 0;
     width: 100%;
 }
 
 .delivery-choice label,
 .payment-choice label {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 10px;
-    min-width: 200px; /* Largeur minimale pour éviter la troncation */
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+    padding-left: 0; /* Supprime le padding à gauche */
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
     margin: 0;
-    flex-shrink: 0; /* Empêche le bouton radio de rétrécir */
+    width: 14px; /* Définit une largeur fixe plus petite */
+    height: 14px; /* Définit une hauteur fixe plus petite */
+    flex-shrink: 0;
+    padding: 0; /* Supprime tout padding */
+}
+
+.payment-choice h4 {
+    margin: 5px 0;
+    font-size: 1em;
 }
 
 .payment-choice label span {
-    flex-grow: 1; /* Permet au texte d'utiliser l'espace disponible */
-    padding-right: 10px; /* Ajoute un peu d'espace à droite */
+    flex-grow: 1;
 }
+
 /* Styles pour le bouton Commander */
 .order-button {
     background-color: var(--primary-color);
@@ -326,6 +334,7 @@ header img.logo {
     width: 100%;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    margin-top: 10px;
 }
 
 .order-button:hover {

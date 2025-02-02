@@ -294,31 +294,28 @@ header img.logo {
 
 .delivery-choice,
 .payment-choice {
-    margin: 0; /* Supprime toutes les marges verticales */
+    margin: 15px 0;
     width: 100%;
-}
-
-.payment-choice {
-    margin-top: 0; /* Supprime l'espace au-dessus de la section paiement */
 }
 
 .delivery-choice label,
 .payment-choice label {
     display: flex;
-    align-items: center;
-    width: 100%;
-    margin: 0; /* Supprime toutes les marges */
-    padding: 0; /* Supprime tout le padding */
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    min-width: 200px; /* Largeur minimale pour éviter la troncation */
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
-    margin: 0 4px 0 0; /* Garde juste un petit espace à droite du bouton radio */
+    margin: 0;
+    flex-shrink: 0; /* Empêche le bouton radio de rétrécir */
 }
 
-/* Pour le titre "Moyen de paiement" */
-.payment-choice h4 {
-    margin: 4px 0; /* Espace minimal autour du titre */
+.payment-choice label span {
+    flex-grow: 1; /* Permet au texte d'utiliser l'espace disponible */
+    padding-right: 10px; /* Ajoute un peu d'espace à droite */
 }
 
 /* Styles pour le bouton Commander */

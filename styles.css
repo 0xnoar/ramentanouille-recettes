@@ -315,6 +315,17 @@ header img.logo {
     background-color: #ff99b9;
 }
 
+.contact-info {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--dark-color);
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    line-height: 1.4;
+}
+
 .hidden {
     display: none;
 }

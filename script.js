@@ -124,22 +124,16 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
+    console.log('Filtres sélectionnés:', selectedFilters);
+
     return allRecipes.filter(recipe => {
         // Si aucun filtre de régime n'est sélectionné, montrer toutes les recettes
         if (selectedFilters.regime.length === 0) {
             return true;
         }
 
-        let recipeRegimes = recipe['Régime alimentaire'];
-        
-        // Vérifier si les régimes sont dans une seule cellule, séparés par des virgules
-        if (typeof recipeRegimes === 'string') {
-            recipeRegimes = recipeRegimes.split(',').map(r => r.trim());
-        }
-        // Sinon, supposer que chaque régime est dans une cellule séparée
-        else if (!Array.isArray(recipeRegimes)) {
-            recipeRegimes = [recipeRegimes];
-        }
+        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
+        console.log('Régimes de la recette:', recipeRegimes);
 
         let regimeMatch = false;
 
@@ -166,6 +160,7 @@ function filterRecipes() {
             }
         }
 
+        // Autres filtres
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 
@@ -176,6 +171,7 @@ function filterRecipes() {
         return regimeMatch && portionMatch && typeMatch && spicyMatch;
     });
 }
+
 // Fonction pour afficher les recettes
 function displayRecipes(recipes) {
     const container = document.getElementById('recipes-container');

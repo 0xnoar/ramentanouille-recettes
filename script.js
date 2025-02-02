@@ -1,15 +1,19 @@
+// Configuration
 const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
 const API_KEY = 'AIzaSyAwbiwOApYCVJoQMDIvsY2SwqT39nAMLgk';
 
 let allRecipes = [];
 
+// Fonction pour charger les recettes depuis Google Sheets
 async function loadRecipes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
+    console.log('URL de requête:', url);
     
     try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log('Données reçues:', data);
 
         if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
@@ -34,6 +38,7 @@ function convertSheetsDataToRecipes(values) {
     });
 }
 
+// Fonction pour créer une carte de recette
 function createRecipeCard(recipe) {
     let imageUrl = recipe['Photo de la recette'];
     
@@ -82,7 +87,6 @@ function createRecipeCard(recipe) {
 
     card.innerHTML = content;
 
-    // Ajout des gestionnaires d'événements pour la quantité
     const minusBtn = card.querySelector('.minus');
     const plusBtn = card.querySelector('.plus');
     const quantityInput = card.querySelector('.quantity-input');
@@ -121,25 +125,16 @@ function filterRecipes() {
     };
 
     return allRecipes.filter(recipe => {
-        let regimeMatch = false;
         const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
-
-        if (selectedFilters.regime.length === 0) return true;
-
-        if (selectedFilters.regime.includes('Sans restriction')) {
-            regimeMatch = true;
-        } else {
-            if (selectedFilters.regime.includes('Véganisme')) {
-                regimeMatch = recipeRegimes.includes('Véganisme');
-            }
-            else if (selectedFilters.regime.includes('Végétarisme')) {
-                regimeMatch = recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
-            }
-            
-            if (selectedFilters.regime.includes('Sans gluten')) {
-                regimeMatch = regimeMatch && recipeRegimes.includes('Sans gluten');
-            }
-        }
+        
+        const regimeMatch = selectedFilters.regime.length === 0 || 
+            selectedFilters.regime.some(filter => {
+                if (filter === 'Sans restriction') return true;
+                if (filter === 'Véganisme') return recipeRegimes.includes('Véganisme');
+                if (filter === 'Végétarisme') return recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
+                if (filter === 'Sans gluten') return recipeRegimes.includes('Sans gluten');
+                return false;
+            });
 
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
@@ -181,20 +176,16 @@ function updateCart() {
         `).join('');
 }
 
-// Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     loadRecipes();
     
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', () => displayRecipes(filterRecipes()));
+        checkbox.addEventListener('change', () => {
+            const filteredRecipes = filterRecipes();
+            displayRecipes(filteredRecipes);
+        });
     });
 
-    // Gestion du panier
-    document.getElementById('cartToggle').addEventListener('click', () => {
-        document.getElementById('cart').classList.toggle('open');
-    });
-
-    // Gestion du panier
     const cartToggle = document.getElementById('cartToggle');
     const cart = document.getElementById('cart');
     if (cartToggle && cart) {
@@ -203,7 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestion du formulaire de commande
     const orderForm = document.getElementById('order-form');
     if (orderForm) {
         orderForm.addEventListener('submit', (event) => {
@@ -211,16 +201,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const formData = new FormData(event.target);
             
-            // Formatage des items pour le template
             const items = allRecipes
                 .filter(recipe => recipe.quantity > 0)
-                .map(recipe => {
-                    return {
-                        title: recipe['Titre de la recette'],
-                        quantity: recipe.quantity
-                    };
-                });
-        
+                .map(recipe => ({
+                    title: recipe['Titre de la recette'],
+                    quantity: recipe.quantity
+                }));
+
             const orderDetails = {
                 customerName: formData.get('name'),
                 phone: formData.get('phone'),
@@ -232,25 +219,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 items: items,
                 items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
             };
-        
+
             emailjs.send('service_hdwid4k', 'template_k2nup5c', {
                 to_name: "Ramen Ta Nouille",
                 from_name: orderDetails.customerName,
                 message: `
-        Détails de la commande :
-        
-        Client : ${orderDetails.customerName}
-        Téléphone : ${orderDetails.phone}
-        Email : ${orderDetails.email}
-        
-        Livraison :
-        Type : ${orderDetails.deliveryType}
-        ${orderDetails.deliveryType === 'Livraison' ? `Adresse : ${orderDetails.deliveryAddress}` : ''}
-        Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
-        Heure : ${orderDetails.deliveryTime}
-        
-        Articles commandés :
-        ${orderDetails.items_list}
+                Détails de la commande :
+                
+                Client : ${orderDetails.customerName}
+                Téléphone : ${orderDetails.phone}
+                Email : ${orderDetails.email}
+                
+                Livraison :
+                Type : ${orderDetails.deliveryType}
+                ${orderDetails.deliveryType === 'Livraison' ? `Adresse : ${orderDetails.deliveryAddress}` : ''}
+                Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
+                Heure : ${orderDetails.deliveryTime}
+                
+                Articles commandés :
+                ${orderDetails.items_list}
                 `
             })
             .then(response => {
@@ -268,7 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestion du type de livraison
     const deliveryInputs = document.querySelectorAll('input[name="delivery-type"]');
     if (deliveryInputs.length > 0) {
         deliveryInputs.forEach(input => {
@@ -281,4 +267,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-;
+});

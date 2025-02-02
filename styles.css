@@ -299,6 +299,20 @@ header img.logo {
     margin-bottom: 10px;
 }
 
+.payment-choice {
+    margin: 15px 0;
+}
+
+.payment-choice h4 {
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.payment-choice label {
+    display: block;
+    margin-bottom: 10px;
+}
+
 .order-button {
     background-color: var(--primary-color);
     color: var(--accent-color);

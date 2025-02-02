@@ -82,6 +82,16 @@
                     <input type="radio" name="delivery-type" value="delivery"> Livraison
                 </label>
             </div>
+            <div class="payment-choice">
+                <h4>Moyen de paiement</h4>
+                <label>
+                    <input type="radio" name="payment-type" value="card" required checked> Carte bancaire
+                </label>
+                <label>
+                    <input type="radio" name="payment-type" value="cash" required> Espèces
+                </label>
+            </div>
+            
             <textarea name="delivery-address" class="hidden" placeholder="Adresse de livraison"></textarea>
             <button type="submit" class="order-button">Commander</button>
             <p class="contact-info">Pour toute précision sur votre commande, n'hésitez pas à me contacter au 06 87 44 88 76.</p>

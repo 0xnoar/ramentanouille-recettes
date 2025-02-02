@@ -248,43 +248,47 @@ document.addEventListener('DOMContentLoaded', () => {
                     quantity: recipe.quantity
                 }));
     
-            const orderDetails = {
-                customerName: formData.get('name'),
-                phone: formData.get('phone'),
-                email: formData.get('email'),
-                deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
-                deliveryAddress: formData.get('delivery-address') || 'Pas de livraison',
-                deliveryDate: formData.get('delivery-date'),
-                deliveryTime: formData.get('delivery-time'),
-                items: items,
-                items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
-            };
-    
-            emailjs.send('service_hdwid4k', 'template_k2nup5c', {
-                to_name: "Ramen Ta Nouille",
-                from_name: orderDetails.customerName,
-                message: `
-                Détails de la commande
-                -------------------
+                const orderDetails = {
+                    customerName: formData.get('name'),
+                    phone: formData.get('phone'),
+                    email: formData.get('email'),
+                    deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
+                    deliveryAddress: formData.get('delivery-address') || 'Pas de livraison',
+                    deliveryDate: formData.get('delivery-date'),
+                    deliveryTime: formData.get('delivery-time'),
+                    paymentType: formData.get('payment-type') === 'card' ? 'Carte bancaire' : 'Espèces',
+                    items: items,
+                    items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
+                };
                 
-                Informations client :
-                - Nom : ${orderDetails.customerName}
-                - Téléphone : ${orderDetails.phone}
-                - Email : ${orderDetails.email}
-                
-                Livraison :
-                - Type : ${orderDetails.deliveryType}
-                ${orderDetails.deliveryType === 'Livraison' ? `- Adresse : ${orderDetails.deliveryAddress}` : ''}
-                - Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
-                - Heure : ${orderDetails.deliveryTime}
-                
-                Articles commandés :
-                -------------------
-                ${orderDetails.items_list}
-                
-                Nombre total d'articles : ${items.reduce((sum, item) => sum + item.quantity, 0)}
-                `
-            })
+                emailjs.send('service_hdwid4k', 'template_k2nup5c', {
+                    to_name: "Ramen Ta Nouille",
+                    from_name: orderDetails.customerName,
+                    message: `
+                    Détails de la commande
+                    -------------------
+                    
+                    Informations client :
+                    - Nom : ${orderDetails.customerName}
+                    - Téléphone : ${orderDetails.phone}
+                    - Email : ${orderDetails.email}
+                    
+                    Livraison :
+                    - Type : ${orderDetails.deliveryType}
+                    ${orderDetails.deliveryType === 'Livraison' ? `- Adresse : ${orderDetails.deliveryAddress}` : ''}
+                    - Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
+                    - Heure : ${orderDetails.deliveryTime}
+                    
+                    Paiement :
+                    - Mode de paiement : ${orderDetails.paymentType}
+                    
+                    Articles commandés :
+                    -------------------
+                    ${orderDetails.items_list}
+                    
+                    Nombre total d'articles : ${items.reduce((sum, item) => sum + item.quantity, 0)}
+                    `
+                })
             .then(response => {
                 console.log('Commande envoyée', response.status, response.text);
                 alert('Votre commande a été envoyée avec succès !');

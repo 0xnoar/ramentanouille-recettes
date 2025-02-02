@@ -38,7 +38,6 @@ function convertSheetsDataToRecipes(values) {
     });
 }
 
-// Fonction pour créer une carte de recette
 function createRecipeCard(recipe) {
     let imageUrl = recipe['Photo de la recette'];
     
@@ -56,33 +55,33 @@ function createRecipeCard(recipe) {
     card.classList.add('recipe-card');
 
     const content = `
-    <div class="recipe-image-container">
-        <img class="recipe-image" src="${imageUrl}" alt="${recipe['Titre de la recette']}">
-    </div>
-    <div class="recipe-content">
-        <div class="recipe-header">
-            <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
-            <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
+        <div class="recipe-image-container">
+            <img class="recipe-image" src="${imageUrl}" alt="${recipe['Titre de la recette']}">
         </div>
-        <div class="recipe-tags">
-            <span class="tag">${recipe['Régime alimentaire']}</span>
-            <span class="tag">${recipe['Type de portion']}</span>
-            <span class="tag">${recipe['Type de plat']}</span>
+        <div class="recipe-content">
+            <div class="recipe-header">
+                <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+                <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
+            </div>
+            <div class="recipe-tags">
+                <span class="tag">${recipe['Régime alimentaire']}</span>
+                <span class="tag">${recipe['Type de portion']}</span>
+                <span class="tag">${recipe['Type de plat']}</span>
+            </div>
+            <div class="recipe-ingredients">
+                <h4>Ingrédients :</h4>
+                <p>${recipe['Liste des ingrédients']}</p>
+            </div>
+            <div class="recipe-instructions">
+                <h4>Instructions :</h4>
+                <p>${recipe['La cheffe vous conseille']}</p>
+            </div>
+            <div class="quantity-control">
+                <button class="quantity-btn minus">-</button>
+                <input type="number" min="0" value="${recipe.quantity}" class="quantity-input">
+                <button class="quantity-btn plus">+</button>
+            </div>
         </div>
-        <div class="recipe-ingredients">
-            <h4>Ingrédients :</h4>
-            <p>${recipe['Liste des ingrédients']}</p>
-        </div>
-        <div class="recipe-instructions">
-            <h4>Instructions :</h4>
-            <p>${recipe['La cheffe vous conseille']}</p>
-        </div>
-        <div class="quantity-control">
-            <button class="quantity-btn minus">-</button>
-            <input type="number" min="0" value="${recipe.quantity}" class="quantity-input">
-            <button class="quantity-btn plus">+</button>
-        </div>
-    </div>
     `;
 
     card.innerHTML = content;
@@ -116,7 +115,7 @@ function createRecipeCard(recipe) {
     return card;
 }
 
-// Fonction de filtrage des recettes (votre logique originale préservée)
+// Fonction de filtrage des recettes
 function filterRecipes() {
     const selectedFilters = {
         regime: Array.from(document.querySelectorAll('input[name="regime"]:checked')).map(cb => cb.value),
@@ -125,8 +124,6 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
-    console.log('Filtres sélectionnés:', selectedFilters);
-
     return allRecipes.filter(recipe => {
         // Si aucun filtre de régime n'est sélectionné, montrer toutes les recettes
         if (selectedFilters.regime.length === 0) {
@@ -134,7 +131,6 @@ function filterRecipes() {
         }
 
         const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
-        console.log('Régimes de la recette:', recipeRegimes);
 
         let regimeMatch = false;
 
@@ -236,55 +232,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Gestion du panier
+    const cartToggle = document.getElementById('cartToggle');
+    const cart = document.getElementById('cart');
+    if (cartToggle && cart) {
+        cartToggle.addEventListener('click', () => {
+            cart.classList.toggle('open');
+        });
+    }
+
     // Gestion du formulaire de commande
-    document.getElementById('order-form').addEventListener('submit', (event) => {
-        event.preventDefault();
+    const orderForm = document.getElementById('order-form');
+    if (orderForm) {
+        orderForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            
+            const itemsList = allRecipes
+                .filter(recipe => recipe.quantity > 0)
+                .map(recipe => ({
+                    title: recipe['Titre de la recette'],
+                    quantity: recipe.quantity
+                }));
 
-        const form = event.target;
-        const formData = new FormData(form);
+            const orderDetails = {
+                customerName: formData.get('name'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
+                deliveryAddress: formData.get('delivery-address'),
+                deliveryDate: new Date(formData.get('delivery-date')).toLocaleDateString('fr-FR'),
+                deliveryTime: formData.get('delivery-time'),
+                items_str: itemsList.map(item => `${item.title}: ${item.quantity}`).join('\n'),
+                items: itemsList
+            };
 
-        const orderDetails = {
-            customerName: formData.get('name'),
-            phone: formData.get('phone'),
-            email: formData.get('email'),
-            deliveryType: formData.get('delivery-type'),
-            deliveryAddress: formData.get('delivery-address'),
-            deliveryDate: formData.get('delivery-date'),
-            deliveryTime: formData.get('delivery-time'),
-            items: allRecipes.filter(recipe => recipe.quantity > 0).map(recipe => ({
-                title: recipe['Titre de la recette'],
-                quantity: recipe.quantity
-            }))
-        };
-
-        emailjs.send('service_hdwid4k', 'template_k2nup5c', orderDetails)
-            .then(response => {
-                console.log('Commande envoyée', response.status, response.text);
-                alert('Votre commande a été envoyée avec succès !');
-                form.reset();
-                allRecipes.forEach(recipe => recipe.quantity = 0);
-                updateCart();
-                displayRecipes(filterRecipes());
-            })
-            .catch(error => {
-                console.error('Erreur', error);
-                alert('Une erreur est survenue, veuillez réessayer.');
-            });
-    });
+            emailjs.send('service_hdwid4k', 'template_k2nup5c', orderDetails)
+                .then(response => {
+                    console.log('Commande envoyée', response.status, response.text);
+                    alert('Votre commande a été envoyée avec succès !');
+                    event.target.reset();
+                    allRecipes.forEach(recipe => recipe.quantity = 0);
+                    updateCart();
+                    displayRecipes(filterRecipes());
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue, veuillez réessayer.');
+                });
+        });
+    }
 
     // Gestion du type de livraison
-    document.querySelectorAll('input[name="delivery-type"]').forEach(radio => {
-        radio.addEventListener('change', (event) => {
-            const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
-            deliveryAddress.classList.toggle('hidden', event.target.value === 'pickup');
-            deliveryAddress.required = event.target.value === 'delivery';
-        });
-    });
-
-    // Gestion du toggle du panier
-    if (document.getElementById('cartToggle')) {
-        document.getElementById('cartToggle').addEventListener('click', () => {
-            document.getElementById('cart').classList.toggle('open');
+    const deliveryInputs = document.querySelectorAll('input[name="delivery-type"]');
+    if (deliveryInputs.length > 0) {
+        deliveryInputs.forEach(input => {
+            input.addEventListener('change', (event) => {
+                const deliveryAddress = document.querySelector('textarea[name="delivery-address"]');
+                if (deliveryAddress) {
+                    deliveryAddress.classList.toggle('hidden', event.target.value === 'pickup');
+                    deliveryAddress.required = event.target.value === 'delivery';
+                }
+            });
         });
     }
 });

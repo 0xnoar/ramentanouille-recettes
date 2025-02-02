@@ -277,6 +277,7 @@ header img.logo {
 }
 
 /* Formulaire de commande */
+/* Formulaire de commande */
 .order-form {
     margin-top: 20px;
 }
@@ -290,49 +291,35 @@ header img.logo {
     border-radius: 4px;
 }
 
+/* Styles communs pour les choix de livraison et paiement */
 .delivery-choice,
 .payment-choice {
     margin: 15px 0;
-    width: 100%; /* Assure que le conteneur prend toute la largeur */
+    width: 100%;
+}
+
+.delivery-choice h4,
+.payment-choice h4 {
+    margin-bottom: 10px;
+    color: var(--dark-color);
 }
 
 .delivery-choice label,
 .payment-choice label {
-    display: grid;
-    grid-template-columns: auto minmax(200px, 1fr); /* Force une largeur minimale pour le texte */
-    align-items: start;
-    gap: 10px;
+    display: flex;
+    align-items: center;
+    width: 100%;
     margin-bottom: 10px;
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
     margin: 0;
-    margin-top: 3px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
-/* Nouveau style pour assurer que le texte est visible en entier */
-.delivery-choice label span,
-.payment-choice label span {
-    white-space: nowrap;
-    overflow: visible;
-    width: 100%;
-}
-
-.payment-choice {
-    margin: 15px 0;
-}
-
-.payment-choice h4 {
-    margin-bottom: 10px;
-    color: var(--dark-color);
-}
-
-.payment-choice label {
-    display: block;
-    margin-bottom: 10px;
-}
-
+/* Styles pour le bouton Commander */
 .order-button {
     background-color: var(--primary-color);
     color: var(--accent-color);

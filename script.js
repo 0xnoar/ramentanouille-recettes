@@ -127,15 +127,43 @@ function filterRecipes() {
     return allRecipes.filter(recipe => {
         const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
         
-        const regimeMatch = selectedFilters.regime.length === 0 || 
-            selectedFilters.regime.some(filter => {
-                if (filter === 'Sans restriction') return true;
-                if (filter === 'Véganisme') return recipeRegimes.includes('Véganisme');
-                if (filter === 'Végétarisme') return recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
-                if (filter === 'Sans gluten') return recipeRegimes.includes('Sans gluten');
-                return false;
-            });
+        // Gestion des régimes alimentaires
+        let regimeMatch = selectedFilters.regime.length === 0;
 
+        if (!regimeMatch) {
+            // Si "Sans restriction" est sélectionné
+            if (selectedFilters.regime.includes('Sans restriction')) {
+                regimeMatch = true;
+            } else {
+                // Gérer les autres filtres
+                selectedFilters.regime.forEach(filter => {
+                    switch (filter) {
+                        case 'Véganisme':
+                            // Véganisme : montre les recettes véganes ET végétariennes
+                            if (recipeRegimes.includes('Véganisme') || recipeRegimes.includes('Végétarisme')) {
+                                regimeMatch = true;
+                            }
+                            break;
+                        case 'Végétarisme':
+                            // Végétarisme : uniquement les recettes végétariennes
+                            if (recipeRegimes.includes('Végétarisme')) {
+                                regimeMatch = true;
+                            }
+                            break;
+                        case 'Sans gluten':
+                            // Sans gluten peut être combiné avec les autres filtres
+                            if (!regimeMatch) {
+                                regimeMatch = recipeRegimes.includes('Sans gluten');
+                            } else {
+                                regimeMatch = regimeMatch && recipeRegimes.includes('Sans gluten');
+                            }
+                            break;
+                    }
+                });
+            }
+        }
+
+        // Autres filtres inchangés
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 

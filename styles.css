@@ -290,13 +290,22 @@ header img.logo {
     border-radius: 4px;
 }
 
-.delivery-choice {
+.delivery-choice,
+.payment-choice {
     margin: 15px 0;
 }
 
-.delivery-choice label {
-    display: block;
+.delivery-choice label,
+.payment-choice label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 10px;
+}
+
+.delivery-choice input[type="radio"],
+.payment-choice input[type="radio"] {
+    margin: 0;
 }
 
 .payment-choice {

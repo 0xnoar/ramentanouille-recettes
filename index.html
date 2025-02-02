@@ -99,5 +99,16 @@
         })();
     </script>
     <script src="script.js"></script>
-</body>
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadRecipes();
+    
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    displayRecipes(filterRecipes());
+                });
+            });
+        });
+    </script>
+    </body>
+    </html>

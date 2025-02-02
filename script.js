@@ -249,38 +249,60 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const formData = new FormData(event.target);
             
-            const itemsList = allRecipes
+            // Formatage des items pour le template
+            const items = allRecipes
                 .filter(recipe => recipe.quantity > 0)
-                .map(recipe => ({
-                    title: recipe['Titre de la recette'],
-                    quantity: recipe.quantity
-                }));
-
+                .map(recipe => {
+                    return {
+                        title: recipe['Titre de la recette'],
+                        quantity: recipe.quantity
+                    };
+                });
+        
             const orderDetails = {
                 customerName: formData.get('name'),
                 phone: formData.get('phone'),
                 email: formData.get('email'),
                 deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
-                deliveryAddress: formData.get('delivery-address'),
-                deliveryDate: new Date(formData.get('delivery-date')).toLocaleDateString('fr-FR'),
+                deliveryAddress: formData.get('delivery-address') || 'Pas de livraison',
+                deliveryDate: formData.get('delivery-date'),
                 deliveryTime: formData.get('delivery-time'),
-                items_str: itemsList.map(item => `${item.title}: ${item.quantity}`).join('\n'),
-                items: itemsList
+                items: items,
+                items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
             };
-
-            emailjs.send('service_hdwid4k', 'template_k2nup5c', orderDetails)
-                .then(response => {
-                    console.log('Commande envoyée', response.status, response.text);
-                    alert('Votre commande a été envoyée avec succès !');
-                    event.target.reset();
-                    allRecipes.forEach(recipe => recipe.quantity = 0);
-                    updateCart();
-                    displayRecipes(filterRecipes());
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                    alert('Une erreur est survenue, veuillez réessayer.');
-                });
+        
+            emailjs.send('service_hdwid4k', 'template_k2nup5c', {
+                to_name: "Ramen Ta Nouille",
+                from_name: orderDetails.customerName,
+                message: `
+        Détails de la commande :
+        
+        Client : ${orderDetails.customerName}
+        Téléphone : ${orderDetails.phone}
+        Email : ${orderDetails.email}
+        
+        Livraison :
+        Type : ${orderDetails.deliveryType}
+        ${orderDetails.deliveryType === 'Livraison' ? `Adresse : ${orderDetails.deliveryAddress}` : ''}
+        Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
+        Heure : ${orderDetails.deliveryTime}
+        
+        Articles commandés :
+        ${orderDetails.items_list}
+                `
+            })
+            .then(response => {
+                console.log('Commande envoyée', response.status, response.text);
+                alert('Votre commande a été envoyée avec succès !');
+                event.target.reset();
+                allRecipes.forEach(recipe => recipe.quantity = 0);
+                updateCart();
+                displayRecipes(filterRecipes());
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue, veuillez réessayer.');
+            });
         });
     }
 

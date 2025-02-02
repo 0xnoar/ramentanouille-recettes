@@ -189,52 +189,15 @@ function updateRecipeCounter(count) {
     document.querySelector('#recipe-counter span').textContent = count;
 }
 
-// Fonction pour mettre à jour le panier
-function updateCart() {
-    const cartItems = document.getElementById('cart-items');
-    cartItems.innerHTML = '';
-
-    const selectedRecipes = allRecipes.filter(recipe => recipe.quantity > 0);
-
-    selectedRecipes.forEach(recipe => {
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-
-        const itemInfo = document.createElement('div');
-        itemInfo.classList.add('cart-item-info');
-        itemInfo.innerHTML = `
-            <div class="cart-item-title">${recipe['Titre de la recette']}</div>
-            <div class="cart-item-quantity">Quantité: ${recipe.quantity}</div>
-        `;
-
-        const removeButton = document.createElement('button');
-        removeButton.classList.add('cart-item-remove');
-        removeButton.innerHTML = '×';
-        removeButton.addEventListener('click', () => {
-            recipe.quantity = 0;
-            updateCart();
-            displayRecipes(filterRecipes());
-        });
-
-        cartItem.appendChild(itemInfo);
-        cartItem.appendChild(removeButton);
-        cartItems.appendChild(cartItem);
-    });
-
-    const orderForm = document.getElementById('order-form');
-    orderForm.classList.toggle('hidden', selectedRecipes.length === 0);
-}
-
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     loadRecipes();
-    
-    // Gestion des filtres
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             displayRecipes(filterRecipes());
         });
     });
+});
 
     // Gestion du panier
     const cartToggle = document.getElementById('cartToggle');
@@ -323,4 +286,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-});
+;

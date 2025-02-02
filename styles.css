@@ -282,28 +282,24 @@ header img.logo {
     margin-top: 20px;
 }
 
+/* Enlever tous les styles précédents pour ces classes et utiliser ceux-ci */
 .order-form input,
 .order-form textarea {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Réduit l'espace entre les champs */
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-/* Styles communs pour les choix de livraison et paiement */
-/* Styles communs pour les choix de livraison et paiement */
-/* Styles communs pour les choix de livraison et paiement */
 .delivery-choice,
 .payment-choice {
-    margin: 5px 0; /* Réduit la marge verticale */
+    margin: 0; /* Supprime toutes les marges verticales */
     width: 100%;
 }
 
-.delivery-choice h4,
-.payment-choice h4 {
-    margin-bottom: 4px; /* Réduit l'espace sous le titre */
-    color: var(--dark-color);
+.payment-choice {
+    margin-top: 0; /* Supprime l'espace au-dessus de la section paiement */
 }
 
 .delivery-choice label,
@@ -311,20 +307,18 @@ header img.logo {
     display: flex;
     align-items: center;
     width: 100%;
-    margin-bottom: 2px; /* Réduit l'espace entre les options */
-    padding: 0; /* Supprime tout padding */
+    margin: 0; /* Supprime toutes les marges */
+    padding: 0; /* Supprime tout le padding */
 }
 
 .delivery-choice input[type="radio"],
 .payment-choice input[type="radio"] {
-    margin: 0;
-    margin-right: 4px; /* Réduit l'espace entre le bouton radio et le texte */
-    flex-shrink: 0;
+    margin: 0 4px 0 0; /* Garde juste un petit espace à droite du bouton radio */
 }
 
-/* Ajustement de l'espacement entre les sections */
-.payment-choice {
-    margin-top: 2px; /* Espace minimal entre les sections */
+/* Pour le titre "Moyen de paiement" */
+.payment-choice h4 {
+    margin: 4px 0; /* Espace minimal autour du titre */
 }
 
 /* Styles pour le bouton Commander */

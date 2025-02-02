@@ -164,6 +164,9 @@ function updateCart() {
     cartCount.textContent = total;
     
     const cartItems = document.getElementById('cart-items');
+    const orderForm = document.getElementById('order-form');
+    
+    // Mise à jour des articles du panier
     cartItems.innerHTML = allRecipes
         .filter(recipe => recipe.quantity > 0)
         .map(recipe => `
@@ -174,6 +177,15 @@ function updateCart() {
                 </div>
             </div>
         `).join('');
+
+    // Afficher/masquer le formulaire en fonction du contenu du panier
+    if (orderForm) {
+        if (total > 0) {
+            orderForm.classList.remove('hidden');
+        } else {
+            orderForm.classList.add('hidden');
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

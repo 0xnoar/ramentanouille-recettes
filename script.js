@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: recipe['Titre de la recette'],
                     quantity: recipe.quantity
                 }));
-
+    
             const orderDetails = {
                 customerName: formData.get('name'),
                 phone: formData.get('phone'),
@@ -219,25 +219,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 items: items,
                 items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
             };
-
+    
             emailjs.send('service_hdwid4k', 'template_k2nup5c', {
                 to_name: "Ramen Ta Nouille",
                 from_name: orderDetails.customerName,
                 message: `
-                Détails de la commande :
+                Détails de la commande
+                -------------------
                 
-                Client : ${orderDetails.customerName}
-                Téléphone : ${orderDetails.phone}
-                Email : ${orderDetails.email}
+                Informations client :
+                - Nom : ${orderDetails.customerName}
+                - Téléphone : ${orderDetails.phone}
+                - Email : ${orderDetails.email}
                 
                 Livraison :
-                Type : ${orderDetails.deliveryType}
-                ${orderDetails.deliveryType === 'Livraison' ? `Adresse : ${orderDetails.deliveryAddress}` : ''}
-                Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
-                Heure : ${orderDetails.deliveryTime}
+                - Type : ${orderDetails.deliveryType}
+                ${orderDetails.deliveryType === 'Livraison' ? `- Adresse : ${orderDetails.deliveryAddress}` : ''}
+                - Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
+                - Heure : ${orderDetails.deliveryTime}
                 
                 Articles commandés :
+                -------------------
                 ${orderDetails.items_list}
+                
+                Nombre total d'articles : ${items.reduce((sum, item) => sum + item.quantity, 0)}
                 `
             })
             .then(response => {

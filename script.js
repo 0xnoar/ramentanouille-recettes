@@ -139,14 +139,14 @@ function filterRecipes() {
                 selectedFilters.regime.forEach(filter => {
                     switch (filter) {
                         case 'Véganisme':
-                            // Véganisme : montre les recettes véganes ET végétariennes
-                            if (recipeRegimes.includes('Véganisme') || recipeRegimes.includes('Végétarisme')) {
+                            // Véganisme : uniquement les recettes véganes
+                            if (recipeRegimes.includes('Véganisme')) {
                                 regimeMatch = true;
                             }
                             break;
                         case 'Végétarisme':
-                            // Végétarisme : uniquement les recettes végétariennes
-                            if (recipeRegimes.includes('Végétarisme')) {
+                            // Végétarisme : recettes végétariennes ET véganes
+                            if (recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme')) {
                                 regimeMatch = true;
                             }
                             break;

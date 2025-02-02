@@ -1,19 +1,15 @@
-// Configuration
 const SHEET_ID = '1iFMNwxAiURSFHR3w622PfIJh4FxSWQSrVjNsKZj29J0';
 const SHEET_NAME = 'listedesrecettes';
 const API_KEY = 'AIzaSyAwbiwOApYCVJoQMDIvsY2SwqT39nAMLgk';
 
 let allRecipes = [];
 
-// Fonction pour charger les recettes depuis Google Sheets
 async function loadRecipes() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
-    console.log('URL de requête:', url);
     
     try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log('Données reçues:', data);
 
         if (data.values && data.values.length > 0) {
             allRecipes = convertSheetsDataToRecipes(data.values);
@@ -33,7 +29,7 @@ function convertSheetsDataToRecipes(values) {
         headers.forEach((header, index) => {
             recipe[header] = row[index] ? row[index].trim() : '';
         });
-        recipe.quantity = 0; // Ajout de la propriété quantité
+        recipe.quantity = 0;
         return recipe;
     });
 }
@@ -124,43 +120,27 @@ function filterRecipes() {
         spicy: Array.from(document.querySelectorAll('input[name="spicy"]:checked')).map(cb => cb.value)
     };
 
-    console.log('Filtres sélectionnés:', selectedFilters);
-
     return allRecipes.filter(recipe => {
-        // Si aucun filtre de régime n'est sélectionné, montrer toutes les recettes
-        if (selectedFilters.regime.length === 0) {
-            return true;
-        }
-
-        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
-        console.log('Régimes de la recette:', recipeRegimes);
-
         let regimeMatch = false;
+        const recipeRegimes = recipe['Régime alimentaire'].split(',').map(r => r.trim());
 
-        // Traitement des régimes alimentaires
+        if (selectedFilters.regime.length === 0) return true;
+
         if (selectedFilters.regime.includes('Sans restriction')) {
             regimeMatch = true;
         } else {
-            // Vérifier le véganisme (uniquement recettes véganes)
             if (selectedFilters.regime.includes('Véganisme')) {
                 regimeMatch = recipeRegimes.includes('Véganisme');
             }
-            // Vérifier le végétarisme (inclut recettes véganes ET végétariennes)
             else if (selectedFilters.regime.includes('Végétarisme')) {
                 regimeMatch = recipeRegimes.includes('Végétarisme') || recipeRegimes.includes('Véganisme');
             }
             
-            // Vérifier sans gluten (peut être combiné avec végétarisme ou véganisme)
             if (selectedFilters.regime.includes('Sans gluten')) {
-                if (regimeMatch) {
-                    regimeMatch = recipeRegimes.includes('Sans gluten');
-                } else {
-                    regimeMatch = recipeRegimes.includes('Sans gluten');
-                }
+                regimeMatch = regimeMatch && recipeRegimes.includes('Sans gluten');
             }
         }
 
-        // Autres filtres
         const portionMatch = selectedFilters.portion.length === 0 || 
             selectedFilters.portion.includes(recipe['Type de portion']);
         const typeMatch = selectedFilters.type.length === 0 || 
@@ -172,32 +152,47 @@ function filterRecipes() {
     });
 }
 
-// Fonction pour afficher les recettes
 function displayRecipes(recipes) {
     const container = document.getElementById('recipes-container');
     container.innerHTML = '';
-
-    recipes.forEach(recipe => {
-        const card = createRecipeCard(recipe);
-        container.appendChild(card);
-    });
+    recipes.forEach(recipe => container.appendChild(createRecipeCard(recipe)));
     updateRecipeCounter(recipes.length);
 }
 
-// Fonction pour mettre à jour le compteur
 function updateRecipeCounter(count) {
     document.querySelector('#recipe-counter span').textContent = count;
+}
+
+function updateCart() {
+    const cartCount = document.querySelector('.cart-count');
+    const total = allRecipes.reduce((sum, recipe) => sum + recipe.quantity, 0);
+    cartCount.textContent = total;
+    
+    const cartItems = document.getElementById('cart-items');
+    cartItems.innerHTML = allRecipes
+        .filter(recipe => recipe.quantity > 0)
+        .map(recipe => `
+            <div class="cart-item">
+                <div>
+                    <div class="cart-item-title">${recipe['Titre de la recette']}</div>
+                    <div class="cart-item-quantity">Quantité: ${recipe.quantity}</div>
+                </div>
+            </div>
+        `).join('');
 }
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     loadRecipes();
+    
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            displayRecipes(filterRecipes());
-        });
+        checkbox.addEventListener('change', () => displayRecipes(filterRecipes()));
     });
-});
+
+    // Gestion du panier
+    document.getElementById('cartToggle').addEventListener('click', () => {
+        document.getElementById('cart').classList.toggle('open');
+    });
 
     // Gestion du panier
     const cartToggle = document.getElementById('cartToggle');

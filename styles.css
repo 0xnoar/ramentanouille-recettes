@@ -296,13 +296,13 @@ header img.logo {
 /* Styles communs pour les choix de livraison et paiement */
 .delivery-choice,
 .payment-choice {
-    margin: 10px 0; /* Réduit la marge verticale */
+    margin: 5px 0; /* Réduit la marge verticale */
     width: 100%;
 }
 
 .delivery-choice h4,
 .payment-choice h4 {
-    margin-bottom: 8px; /* Réduit l'espace sous le titre */
+    margin-bottom: 4px; /* Réduit l'espace sous le titre */
     color: var(--dark-color);
 }
 
@@ -311,7 +311,7 @@ header img.logo {
     display: flex;
     align-items: center;
     width: 100%;
-    margin-bottom: 6px; /* Réduit l'espace entre les options */
+    margin-bottom: 2px; /* Réduit l'espace entre les options */
     padding: 0; /* Supprime tout padding */
 }
 
@@ -320,6 +320,11 @@ header img.logo {
     margin: 0;
     margin-right: 4px; /* Réduit l'espace entre le bouton radio et le texte */
     flex-shrink: 0;
+}
+
+/* Ajustement de l'espacement entre les sections */
+.payment-choice {
+    margin-top: 2px; /* Espace minimal entre les sections */
 }
 
 /* Styles pour le bouton Commander */

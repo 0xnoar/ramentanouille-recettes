@@ -170,7 +170,7 @@ header img.logo {
 .quantity-control {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* Pour espacer les éléments uniformément */
     gap: 10px;
     margin-top: 15px;
     padding: 10px;
@@ -193,16 +193,19 @@ header img.logo {
     transition: background-color 0.3s ease;
 }
 
-.quantity-btn:hover {
-    background-color: #ff99b9;
-}
-
 .quantity-input {
     width: 50px;
     text-align: center;
     border: 1px solid var(--primary-color);
     border-radius: 4px;
     padding: 5px;
+}
+
+.quantity-control .price {
+    font-weight: bold;
+    color: var(--accent-color);
+    font-size: 1.1em;
+    margin-left: auto; /* Pour pousser le prix à droite */
 }
 
 /* Panier */

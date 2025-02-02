@@ -276,6 +276,36 @@ header img.logo {
     padding: 5px;
 }
 
+/* Styles des prix pour les cartes et le panier */
+.recipe-price {
+    font-weight: bold;
+    color: var(--accent-color);
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+.cart-item-details {
+    font-size: 0.9em;
+    color: #666;
+    margin: 2px 0;
+}
+
+.cart-item-subtotal {
+    font-size: 0.9em;
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+.cart-total {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px solid var(--primary-color);
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    color: var(--accent-color);
+}
+
 /* Formulaire de commande */
 .order-form {
     margin-top: 20px;

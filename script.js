@@ -62,6 +62,7 @@ function createRecipeCard(recipe) {
         <div class="recipe-content">
             <div class="recipe-header">
                 <h3 class="recipe-title">${recipe['Titre de la recette']}</h3>
+                <div class="recipe-price">${parseFloat(recipe['Prix']).toFixed(2)} €</div>
                 <div class="spicy-level">${recipe['Niveau de piment'] || 'Non pimenté'}</div>
             </div>
             <div class="recipe-tags">
@@ -192,28 +193,32 @@ function updateCart() {
     cartCount.textContent = total;
     
     const cartItems = document.getElementById('cart-items');
-    const orderForm = document.getElementById('order-form');
-    
-    // Mise à jour des articles du panier
-    cartItems.innerHTML = allRecipes
+    // Calculer le total des prix
+    const totalPrice = allRecipes
         .filter(recipe => recipe.quantity > 0)
-        .map(recipe => `
-            <div class="cart-item">
-                <div>
-                    <div class="cart-item-title">${recipe['Titre de la recette']}</div>
-                    <div class="cart-item-quantity">Quantité: ${recipe.quantity}</div>
+        .reduce((sum, recipe) => sum + (parseFloat(recipe['Prix']) * recipe.quantity), 0);
+    
+    // Mettre à jour le contenu du panier
+    cartItems.innerHTML = `
+        ${allRecipes
+            .filter(recipe => recipe.quantity > 0)
+            .map(recipe => `
+                <div class="cart-item">
+                    <div>
+                        <div class="cart-item-title">${recipe['Titre de la recette']}</div>
+                        <div class="cart-item-details">
+                            Quantité: ${recipe.quantity} × ${parseFloat(recipe['Prix']).toFixed(2)} €
+                        </div>
+                        <div class="cart-item-subtotal">
+                            Sous-total: ${(recipe.quantity * parseFloat(recipe['Prix'])).toFixed(2)} €
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `).join('');
-
-    // Afficher/masquer le formulaire en fonction du contenu du panier
-    if (orderForm) {
-        if (total > 0) {
-            orderForm.classList.remove('hidden');
-        } else {
-            orderForm.classList.add('hidden');
-        }
-    }
+            `).join('')}
+        <div class="cart-total">
+            Total: ${totalPrice.toFixed(2)} €
+        </div>
+    `;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -241,54 +246,67 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const formData = new FormData(event.target);
             
+            // Formatage des items pour le template avec les prix
             const items = allRecipes
                 .filter(recipe => recipe.quantity > 0)
-                .map(recipe => ({
-                    title: recipe['Titre de la recette'],
-                    quantity: recipe.quantity
-                }));
-    
-                const orderDetails = {
-                    customerName: formData.get('name'),
-                    phone: formData.get('phone'),
-                    email: formData.get('email'),
-                    deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
-                    deliveryAddress: formData.get('delivery-address') || 'Pas de livraison',
-                    deliveryDate: formData.get('delivery-date'),
-                    deliveryTime: formData.get('delivery-time'),
-                    paymentType: formData.get('payment-type') === 'card' ? 'Carte bancaire' : 'Espèces',
-                    items: items,
-                    items_list: items.map(item => `${item.title} x${item.quantity}`).join('\n')
-                };
+                .map(recipe => {
+                    const price = parseFloat(recipe['Prix']);
+                    const subtotal = price * recipe.quantity;
+                    return {
+                        title: recipe['Titre de la recette'],
+                        quantity: recipe.quantity,
+                        price: price.toFixed(2),
+                        subtotal: subtotal.toFixed(2)
+                    };
+                });
+        
+            // Calcul du total
+            const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.subtotal)), 0);
+        
+            const orderDetails = {
+                customerName: formData.get('name'),
+                phone: formData.get('phone'),
+                email: formData.get('email'),
+                deliveryType: formData.get('delivery-type') === 'pickup' ? 'À venir chercher' : 'Livraison',
+                deliveryAddress: formData.get('delivery-address') || 'Pas de livraison',
+                deliveryDate: formData.get('delivery-date'),
+                deliveryTime: formData.get('delivery-time'),
+                paymentType: formData.get('payment-type') === 'card' ? 'Carte bancaire' : 'Espèces',
+                items: items,
+                totalPrice: totalPrice.toFixed(2),
+                items_list: items.map(item => 
+                    `${item.title} x${item.quantity} (${item.price} € l'unité) = ${item.subtotal} €`
+                ).join('\n')
+            };
+        
+            emailjs.send('service_hdwid4k', 'template_k2nup5c', {
+                to_name: "Ramen Ta Nouille",
+                from_name: orderDetails.customerName,
+                message: `
+                Détails de la commande
+                -------------------
                 
-                emailjs.send('service_hdwid4k', 'template_k2nup5c', {
-                    to_name: "Ramen Ta Nouille",
-                    from_name: orderDetails.customerName,
-                    message: `
-                    Détails de la commande
-                    -------------------
-                    
-                    Informations client :
-                    - Nom : ${orderDetails.customerName}
-                    - Téléphone : ${orderDetails.phone}
-                    - Email : ${orderDetails.email}
-                    
-                    Livraison :
-                    - Type : ${orderDetails.deliveryType}
-                    ${orderDetails.deliveryType === 'Livraison' ? `- Adresse : ${orderDetails.deliveryAddress}` : ''}
-                    - Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
-                    - Heure : ${orderDetails.deliveryTime}
-                    
-                    Paiement :
-                    - Mode de paiement : ${orderDetails.paymentType}
-                    
-                    Articles commandés :
-                    -------------------
-                    ${orderDetails.items_list}
-                    
-                    Nombre total d'articles : ${items.reduce((sum, item) => sum + item.quantity, 0)}
-                    `
-                })
+                Informations client :
+                - Nom : ${orderDetails.customerName}
+                - Téléphone : ${orderDetails.phone}
+                - Email : ${orderDetails.email}
+                
+                Livraison :
+                - Type : ${orderDetails.deliveryType}
+                ${orderDetails.deliveryType === 'Livraison' ? `- Adresse : ${orderDetails.deliveryAddress}` : ''}
+                - Date : ${new Date(orderDetails.deliveryDate).toLocaleDateString('fr-FR')}
+                - Heure : ${orderDetails.deliveryTime}
+                
+                Paiement :
+                - Mode de paiement : ${orderDetails.paymentType}
+                
+                Articles commandés :
+                -------------------
+                ${orderDetails.items_list}
+                
+                TOTAL : ${orderDetails.totalPrice} €
+                `
+            })
             .then(response => {
                 console.log('Commande envoyée', response.status, response.text);
                 alert('Votre commande a été envoyée avec succès !');
